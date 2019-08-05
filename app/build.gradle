@@ -1,0 +1,111 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.1"
+    defaultConfig {
+        applicationId "com.currencytrackingapp"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+androidExtensions {
+    experimental = true
+}
+
+dependencies {
+
+    def dependencies = rootProject.ext.dependencies
+
+    //Android
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01' //dependencies.supportAppcompat
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3' //dependencies.supportConstraint
+    implementation 'androidx.cardview:cardview:1.0.0' //dependencies.supportCardView
+    implementation 'com.google.android.material:material:1.1.0-alpha09' //dependencies.supportDesign
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta01' //dependencies.supportRv
+    implementation 'androidx.paging:paging-runtime:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.exifinterface:exifinterface:1.0.0'
+//    kapt dependencies.databindingCompiler
+//    kapt 'com.android.databinding:compiler:3.1.4'
+
+    //Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}" //dependencies.kotlinLib
+    implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}" //dependencies.kotlinReflect
+
+    // AAC
+    implementation "androidx.lifecycle:lifecycle-runtime:2.2.0-alpha02" //dependencies.lifecycleRuntume
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02" //dependencies.lifecycleExtensions
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha02" //dependencies.lifecycleCompiler
+
+    // Room
+    implementation "androidx.room:room-runtime:2.1.0" // dependencies.room
+    implementation "androidx.room:room-ktx:2.1.0" // dependencies.roomCoroutines
+    kapt "androidx.room:room-compiler:2.1.0" //dependencies.roomCompiler //"androidx.room:room-compiler:2.1.0"
+
+    // Kotlin Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1" // dependencies.coroutinesAndroid
+
+    //Koin Core
+    implementation dependencies.koinCore //"org.koin:koin-core:${koinVersion}" //dependencies.koinCore
+
+    // Koin Android
+//    implementation "org.koin:koin-android:${koinVersion}"
+    implementation dependencies.koinAndroidScope //"org.koin:koin-android-scope:2.0.1"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:converter-gson:2.5.0" // dependencies.retrofitGsonConverter
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.5.0" // dependencies.retrofitAdapter
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"// dependencies.coroutinesAdapter
+    implementation "com.squareup.okhttp3:okhttp:3.12.1" //dependencies.okhttp
+    implementation "com.squareup.okhttp3:logging-interceptor:3.12.1" // dependencies.okhttpLogging
+
+    // Gson
+    implementation "com.google.code.gson:gson:2.8.5" //dependencies.gson
+
+    //MultiDex
+    implementation "androidx.multidex:multidex:2.0.1" // dependencies.multidexLib
+
+    //EasyPermissions
+    implementation "pub.devrel:easypermissions:2.0.0" // dependencies.easyPermissionsLib
+
+    //Timber
+    implementation "com.jakewharton.timber:timber:4.7.1" // dependencies.timber
+
+    //Other
+    implementation "de.hdodenhof:circleimageview:3.0.0" // dependencies.circleImageView
+    implementation "com.github.bumptech.glide:glide:4.9.0"
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
+
+    // Rx
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.2" // dependencies.rxandroid
+    implementation "io.reactivex.rxjava2:rxjava:2.2.3" // dependencies.rxjava
+    implementation "io.reactivex.rxjava2:rxkotlin:2.1.0" // dependencies.rxkotlin
+
+    // TEST
+    testImplementation "junit:junit:4.12" // testDependencies.junit
+    testImplementation "androidx.room:room-testing:2.1.0" // testDependencies.roomTesting
+
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0" // testDependencies.espresso
+    androidTestImplementation "androidx.test:runner:1.2.0"
+}

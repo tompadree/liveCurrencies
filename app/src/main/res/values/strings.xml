@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">CurrencyTrackingApp</string>
+
+    <!--General-->
+    <string name="ok">Ok</string>
+    <string name="error_default">Something went wrong</string>
+    <string name="no_internet_connection_title">No internet connection</string>
+    <string name="no_internet_connection_text">Something is wrong with your internet connection</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+        ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+        aliquip ex ea commodo consequat.
+    </string>
+    <string name="lorem_ipsum_short">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.
+    </string>
+    <string name="dummy_number">123456</string>
+    <string name="dummy_date">18-08-2019</string>
+
+    <!--Currencies activity-->
+    <string name="rates">Rates</string>
+
+    <!--Currencies-->
+    <string name="aud">Australian Dollar</string>
+    <string name="bgn">Bulgarian Lev</string>
+    <string name="brl">Brazilian Real</string>
+    <string name="cad">Canadian Dollar</string>
+    <string name="chf">Swiss Franc</string>
+    <string name="cny">Chinese Yuan</string>
+    <string name="czk">Czech Koruna</string>
+    <string name="dkk">Danish Krone</string>
+    <string name="eur">Euro</string>
+    <string name="gbp">Pound Sterling</string>
+    <string name="hkd">Hong Kong Dollar</string>
+    <string name="hrk">Croatian Kuna</string>
+    <string name="huf">Hungarian Forint</string>
+    <string name="idr">Indonesian Rupiah</string>
+    <string name="ils">Israeli Shekel</string>
+    <string name="inr">Indian Rupee</string>
+    <string name="isk">Icelandic Króna</string>
+    <string name="jpy">Japanese Yen</string>
+    <string name="krw">South Korean Won</string>
+    <string name="mxn">Mexican Peso</string>
+    <string name="myr">Malaysian Ringgit</string>
+    <string name="nok">Norwegian Krone</string>
+    <string name="nzd">New Zealand Dollar</string>
+    <string name="php">Philippine Peso</string>
+    <string name="pln">Polish Złoty</string>
+    <string name="ron">Romanian Leu</string>
+    <string name="rub">Russian Ruble</string>
+    <string name="sek">Swedish Krona</string>
+    <string name="sgd">Singapore Dollar</string>
+    <string name="thb">Thai Baht</string>
+    <string name="turkish_lira">Turkish lira</string>
+    <string name="usd">United States Dollar</string>
+    <string name="zar">South African Rand</string>
+
+    <string name="eur_">EUR</string>
+
+</resources>
