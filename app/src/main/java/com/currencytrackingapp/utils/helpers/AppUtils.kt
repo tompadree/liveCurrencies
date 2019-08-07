@@ -3,6 +3,7 @@ package com.currencytrackingapp.utils.helpers
 import android.app.Activity
 import android.content.res.Configuration
 import android.location.Location
+import android.view.View
 
 interface AppUtils {
 
@@ -17,4 +18,6 @@ interface AppUtils {
     fun toast(id: Int)
 
     fun hideKeyboard(activity: Activity)
+
+    fun showKeyboard(activity: Activity)
 }

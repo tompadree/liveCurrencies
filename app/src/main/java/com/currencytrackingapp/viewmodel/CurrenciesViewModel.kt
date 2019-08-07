@@ -1,8 +1,11 @@
 package com.currencytrackingapp.viewmodel
 
+import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import com.currencytrackingapp.R
 import com.currencytrackingapp.data.api.NetworkApi
 import com.currencytrackingapp.data.models.Rates
@@ -12,6 +15,7 @@ import com.currencytrackingapp.data.models.ResponseSucces
 import com.currencytrackingapp.utils.RequestExecutor
 import com.currencytrackingapp.utils.SingleLiveEvent
 import com.currencytrackingapp.utils.helpers.AppUtils
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
@@ -28,16 +32,22 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
     val currentRates = MutableLiveData<Rates>()
     private val currentRatesUpdatedEvent = SingleLiveEvent<Unit>()
 
+    val _currentList = MutableLiveData<LinkedList<RatesListItem>>()
+
     val _ratesListFetched = MutableLiveData<LinkedList<RatesListItem>>()
     val ratesListFetched: LiveData<LinkedList<RatesListItem>> get() = _ratesListFetched
 
+    val currentBase = ObservableField<String>("EUR")
+    val currentValue = ObservableField<String>("100")
 
     private val userObserver = Observer<Rates> {
         currentRatesUpdatedEvent.postCall()
     }
 
     init {
+        _currentList.value = LinkedList()
         currentRates.observeForever(userObserver)
+        fetchRates()
     }
 
     override fun onCleared() {
@@ -48,56 +58,74 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
         }
     }
 
-    fun fetchRates(base: String, baseValue: String, currentList: LinkedList<RatesListItem>) {
+    fun fetchRatesCOnstant() {
+        viewModelScope.launch {
+            while(true) {
+                delay(1_000)
+                // do something every second
+                Log.e("TEST", "COROUTINE FIRED")
+            }
+        }
+    }
 
-        launch {
-            when (val response = RequestExecutor.execute(networkApi.getLatestRates(base))) { /*TODO BASE*/
-                is ResponseSucces -> {
+    fun fetchRates() { //base: String, baseValue: String, currentList: LinkedList<RatesListItem>) {
 
-                    response.data.body()?.let {
+        viewModelScope.launch {
+            while (true) {
+                delay(1_000)
+                val currentList = _currentList.value?: LinkedList()
+                val currentBase = currentBase.get()?: "EUR"
+                val currentValue = currentValue.get()?: "100"
+                Log.e("TEST", "COROUTINE FIRED")
+                when (val response = RequestExecutor.execute(networkApi.getLatestRates(currentBase))) { /*TODO BASE*/
+                    is ResponseSucces -> {
 
-                        val returnList = LinkedList<RatesListItem>()
-                        val isInit = currentList.isEmpty()
+                        response.data.body()?.let {
 
-                        if (!isInit) {
-                            returnList.addFirst(RatesListItem(base, baseValue.toDouble()))
-                            for (i in 1 until currentList.size) {
-                                returnList.add(
-                                    RatesListItem(
-                                        currentList[i].name,
-                                        roundOffDecimal(baseValue.toDouble() * it.rates[currentList[i].name]!!)
+                            val returnList = LinkedList<RatesListItem>()
+                            val isInit = currentList.isEmpty()
+
+                            if (!isInit) {
+                                returnList.addFirst(RatesListItem(currentBase, currentValue.toDouble()))
+                                for (i in 1 until currentList.size) {
+                                    returnList.add(
+                                        RatesListItem(
+                                            currentList[i].name,
+                                            roundOffDecimal(currentValue.toDouble() * it.rates[currentList[i].name]!!)
+                                        )
                                     )
-                                )
 //                                returnList[i].currentRate = baseValue.toDouble() * it.rates[currentList[i].name]!!
 //                                returnList[i].currentRate = roundOffDecimal(currentList[i].currentRate)
-                            }
-                        } else {
+                                }
+                            } else {
 
-                            returnList.addFirst(RatesListItem(appUtils.getString(R.string.eur_), 100.00))
-                            for (item in it.rates) {
+                                returnList.addFirst(RatesListItem(appUtils.getString(R.string.eur_), 100.00))
+                                for (item in it.rates) {
 //                                if (item.key == it.base)
 //                                    currentList.addFirst(RatesListItem(item.key, 100.00))
 //                                else
 
-                                returnList.add(RatesListItem(item.key, roundOffDecimal(item.value * 100)))
+                                    returnList.add(RatesListItem(item.key, roundOffDecimal(item.value * 100)))
+
+                                }
 
                             }
 
+                            val sorted = when (isInit) {
+                                true -> firstTimeSorting(currentBase, returnList)
+                                else -> returnList
+                            }
+
+                            _currentList.value = sorted
+                            _ratesListFetched.postValue(sorted)
                         }
 
-                        val sorted = when (isInit) {
-                            true -> firstTimeSorting(base, returnList)
-                            else -> returnList
-                        }
-
-                        _ratesListFetched.postValue(sorted)
                     }
-
-                }
-                is ResponseError -> {
-                    fail(response.t as Exception)
-                    postLoading(false)
-                    handleError(response.t)
+                    is ResponseError -> {
+                        fail(response.t as Exception)
+                        postLoading(false)
+                        handleError(response.t)
+                    }
                 }
             }
         }
@@ -117,16 +145,6 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
         return df.format(number).toDouble()
     }
 
-//    fun updateItems(base: String, returnList: LinkedList<RatesListItem>) : LinkedList<RatesListItem> {
-//
-//        val baseValue = returnList.
-//
-//        for(item in returnList){
-//
-//            item =
-//        }
-//
-//    }
 
     data class MyDate(val year: Int, val month: Int, val day: Int)
 

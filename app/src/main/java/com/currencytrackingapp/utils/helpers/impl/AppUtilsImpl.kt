@@ -3,6 +3,8 @@ package com.currencytrackingapp.utils.helpers.impl
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.view.View
+import android.view.inputmethod.InputMethod.SHOW_FORCED
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.ColorRes
@@ -32,5 +34,12 @@ class AppUtilsImpl (val context: Context) : AppUtils {
 
         (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
             .hideSoftInputFromWindow(view?.windowToken ?: return, 0)
+    }
+
+    override fun showKeyboard(activity: Activity) {
+        val view = activity.currentFocus
+
+        (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .showSoftInput(view, SHOW_FORCED)
     }
 }

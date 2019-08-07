@@ -1,5 +1,6 @@
 package com.currencytrackingapp.view.adapters
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.text.Editable
@@ -21,11 +22,9 @@ import kotlinx.android.synthetic.main.item_currencies.*
 import java.util.*
 
 class CurrentRatesAdapter (
-    val context: Context,
+    val activity: Activity,
     private val onCurrencyListener: OnCurrencyListener
 ) : RecyclerView.Adapter<CurrentRateListViewHolder>() {
-
-    private var isInit = true
 
     init {
         setHasStableIds(true)
@@ -44,16 +43,15 @@ class CurrentRatesAdapter (
         return currentRatesDiffer.currentList.size
     }
 
-    override fun getItemId(position: Int): Long = currentRatesDiffer.currentList[position].hashCode().toLong()
+    override fun getItemId(position: Int): Long = currentRatesDiffer.currentList[position].name.hashCode().toLong()
     override fun getItemViewType(position: Int) = position
 
     override fun onBindViewHolder(holder: CurrentRateListViewHolder, position: Int) {
         Log.e("ADAPTER", "onBindViewHolder")
         if(position == 0) {
-            holder.bindView(isInit, position, context, currentRatesDiffer.currentList[position], onCurrencyListener)
-            if(isInit) isInit = false
+            holder.bindView(position, activity, currentRatesDiffer.currentList[position], onCurrencyListener)
         } else if(position != 0)
-            holder.bindView(isInit, position, context, currentRatesDiffer.currentList[position], onCurrencyListener)
+            holder.bindView(position, activity, currentRatesDiffer.currentList[position], onCurrencyListener)
     }
 
     override fun onViewRecycled(holder: CurrentRateListViewHolder) {
@@ -66,7 +64,7 @@ class CurrentRatesAdapter (
         Log.e("ADAPTER", "setData")
         val newList: LinkedList<RatesListItem> = LinkedList()
         newList.addAll(rateList)
-        currentRatesDiffer.submitList(null)
+//        currentRatesDiffer.submitList(null)
 //        currentRatesDif fer.submitList(newList.toList())
 //        currentRatesDiffer.submitList(rateList)
         currentRatesDiffer.submitList(newList)
