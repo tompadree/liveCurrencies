@@ -20,11 +20,16 @@ import com.currencytrackingapp.view.listeners.OnCurrencyListener
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_currencies.*
 import java.util.*
+import android.text.method.TextKeyListener.clear
+import androidx.recyclerview.widget.DiffUtil
+
 
 class CurrentRatesAdapter (
     val activity: Activity,
     private val onCurrencyListener: OnCurrencyListener
 ) : RecyclerView.Adapter<CurrentRateListViewHolder>() {
+
+    private var isInit = true
 
     init {
         setHasStableIds(true)
@@ -33,6 +38,7 @@ class CurrentRatesAdapter (
     private val currentRatesDiffer = AsyncListDiffer<RatesListItem>(this, RatesDiffUtil())
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentRateListViewHolder {
+
         Log.e("ADAPTER", "getItemCount")
         return  CurrentRateListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_currencies, parent, false))
 
@@ -48,9 +54,10 @@ class CurrentRatesAdapter (
 
     override fun onBindViewHolder(holder: CurrentRateListViewHolder, position: Int) {
         Log.e("ADAPTER", "onBindViewHolder")
-        if(position == 0) {
-            holder.bindView(position, activity, currentRatesDiffer.currentList[position], onCurrencyListener)
-        } else if(position != 0)
+//        if(position == 0) {
+//            holder.bindView(position, activity, currentRatesDiffer.currentList[position], onCurrencyListener)
+//            if(isInit) isInit = false
+//        } else if(position != 0)
             holder.bindView(position, activity, currentRatesDiffer.currentList[position], onCurrencyListener)
     }
 
@@ -66,8 +73,10 @@ class CurrentRatesAdapter (
         newList.addAll(rateList)
 //        currentRatesDiffer.submitList(null)
 //        currentRatesDif fer.submitList(newList.toList())
-//        currentRatesDiffer.submitList(rateList)
+
         currentRatesDiffer.submitList(newList)
+
+
     }
 
 }

@@ -19,6 +19,9 @@ import kotlinx.android.synthetic.main.activity_currencies_main.*
 import org.koin.standalone.inject
 import java.util.*
 import android.graphics.Rect
+import kotlin.reflect.jvm.internal.impl.load.java.lazy.ContextKt.child
+import android.view.ViewGroup
+import android.widget.EditText
 
 
 class CurrenciesActivity : BindingActivity<ActivityCurrenciesMainBinding>() {
@@ -97,6 +100,7 @@ class CurrenciesActivity : BindingActivity<ActivityCurrenciesMainBinding>() {
 
         with(currenciesRv) {
             layoutManager = object : LinearLayoutManager(context) {
+
                 override fun requestChildRectangleOnScreen(
                     parent: RecyclerView,
                     child: View,
@@ -105,15 +109,8 @@ class CurrenciesActivity : BindingActivity<ActivityCurrenciesMainBinding>() {
                 ): Boolean {
                     return false
                 }
-
-                override fun requestChildRectangleOnScreen(
-                    parent: RecyclerView,
-                    child: View,
-                    rect: Rect,
-                    immediate: Boolean,
-                    focusedChildVisible: Boolean
-                ): Boolean {
-                    return super.requestChildRectangleOnScreen(parent, child, rect, immediate, focusedChildVisible)
+                override fun requestChildRectangleOnScreen(parent: RecyclerView, child: View, rect: Rect, immediate: Boolean, focusedChildVisible: Boolean): Boolean {
+                        return false
                 }
             }
             adapter = currentRatesAdapter
@@ -130,7 +127,7 @@ class CurrenciesActivity : BindingActivity<ActivityCurrenciesMainBinding>() {
 //            (currenciesRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 ////            itemAnimator = null
 
-//            setHasFixedSize(true)
+            setHasFixedSize(true)
         }
     }
 

@@ -36,8 +36,7 @@
                 android:id="@+id/currenciesRv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:focusableInTouchMode="true"
-                android:descendantFocusability="beforeDescendants"
+
                 android:clipToPadding="false"/>
 
     </FrameLayout>

@@ -54,7 +54,6 @@
             tools:text="@string/dummy_number"
             android:inputType="numberDecimal"
             android:enabled="false"
-            android:focusable="true"
             android:textColor="@drawable/et_disabled_color"
             android:imeOptions="actionDone"
             android:maxLines="1"

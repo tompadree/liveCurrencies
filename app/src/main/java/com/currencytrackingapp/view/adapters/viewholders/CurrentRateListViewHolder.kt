@@ -34,10 +34,10 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
 //            if(!itemCurrenciesEtAmount.isFocused)
 //                hideKeyboard(activity)
             onCurrencyListener.onItemClicked(position)
-//            showKeyboard(activity)
-//            itemCurrenciesEtAmount.clearFocus()
-//            clearFocus(itemCurrenciesEtAmount, activity)
-//            lastPosition = ratesListItem.currentRate.toString().length
+            showKeyboard(activity)
+            itemCurrenciesEtAmount.clearFocus()
+            clearFocus(itemCurrenciesEtAmount, activity)
+            lastPosition = ratesListItem.currentRate.toString().length
         }
 
         itemCurrenciesTvISO.text = ratesListItem.name
@@ -47,25 +47,33 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
         itemCurrenciesIvFlag.setImageResource(CountryHelper.getFlagForISO(ratesListItem.name))
 
         itemCurrenciesEtAmount.setText(ratesListItem.currentRate.toString())
-//        itemCurrenciesEtAmount.clearFocus()
-//        itemCurrenciesEtAmount.requestFocus()
-//        clearFocus(itemCurrenciesEtAmount, activity)
-//        if(!itemCurrenciesEtAmount.isFocused)
-//        if (position == 0) {
-//            setEdiTextListeners(itemCurrenciesEtAmount, activity, onCurrencyListener)
-            itemCurrenciesEtAmount.isEnabled = position == 0
+        itemCurrenciesEtAmount.clearFocus()
+
+        if (position == 0) {
+//            itemCurrenciesEtAmount.isEnabled = true
+            setEdiTextListeners(itemCurrenciesEtAmount, activity, onCurrencyListener)
+//            itemCurrenciesEtAmount.isEnabled = position == 0
 //            itemCurrenciesEtAmount.requestFocus()
-//        }else {
-////            itemCurrenciesEtAmount.clearFocus()
-//            itemCurrenciesEtAmount.isEnabled = false
-////            hideKeyboard(activity)
-////            clearFocus(itemCurrenciesEtAmount, activity)
-//        }
+        }else {
+//            itemCurrenciesEtAmount.clearFocus()
+            itemCurrenciesEtAmount.isEnabled = false
+//            hideKeyboard(activity)
+//            clearFocus(itemCurrenciesEtAmount, activity)
+        }
 
 
     }
 
-    private fun clearFocus(itemCurrenciesEtAmount: EditText, activity: Activity) {
+    fun updateRates(position: Int, activity: Activity, ratesListItem: RatesListItem, onCurrencyListener: OnCurrencyListener) {
+        Log.e("ADAPTER", "updateRates")
+        itemCurrenciesEtAmount.clearFocus()
+        itemCurrenciesEtAmount.setText(ratesListItem.currentRate.toString())
+        itemCurrenciesEtAmount.clearFocus()
+
+    }
+
+
+        private fun clearFocus(itemCurrenciesEtAmount: EditText, activity: Activity) {
         focusCleared = true
         itemCurrenciesEtAmount.clearFocus()
         hideKeyboard(activity)
@@ -93,27 +101,27 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
     private fun setEdiTextListeners(itemCurrenciesEtAmount: EditText, activity: Activity, onCurrencyListener: OnCurrencyListener) {
         itemCurrenciesEtAmount.isEnabled = true
 
-////        if(!itemCurrenciesEtAmount.hasFocus())
-////            itemCurrenciesEtAmount.requestFocus()
-//
-//        itemCurrenciesEtAmount.onFocusChangeListener = View.OnFocusChangeListener { p0, p1 ->
-//            if (!focusCleared) {
-////                if(!itemCurrenciesEtAmount.hasFocus())
-//                itemCurrenciesEtAmount.requestFocus()
-//                itemCurrenciesEtAmount.setSelection(lastPosition)
-//                showKeyboard(activity)
-//                Log.e("ADAPTER", "OnFocusChaner1")
-//            }
-//            else
-//                focusCleared = false
-//            Log.e("ADAPTER", "OnFocusChangeListener")
-//        }
-//        itemCurrenciesEtAmount.setOnEditorActionListener { textView, actionId, keyEvent ->
-//            if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                clearFocus(itemCurrenciesEtAmount, activity)
-//            }
-//            false
-//        }
+//        if(!itemCurrenciesEtAmount.hasFocus())
+//            itemCurrenciesEtAmount.requestFocus()
+
+        itemCurrenciesEtAmount.onFocusChangeListener = View.OnFocusChangeListener { p0, p1 ->
+            if (!focusCleared) {
+//                if(!itemCurrenciesEtAmount.hasFocus())
+                itemCurrenciesEtAmount.requestFocus()
+                itemCurrenciesEtAmount.setSelection(lastPosition)
+                showKeyboard(activity)
+                Log.e("ADAPTER", "OnFocusChaner1")
+            }
+            else
+                focusCleared = false
+            Log.e("ADAPTER", "OnFocusChangeListener")
+        }
+        itemCurrenciesEtAmount.setOnEditorActionListener { textView, actionId, keyEvent ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                clearFocus(itemCurrenciesEtAmount, activity)
+            }
+            false
+        }
 
 //            itemCurrenciesEtAmount.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
 ////                if (keyCode == KeyEvent.KEYCODE_BACK) {
