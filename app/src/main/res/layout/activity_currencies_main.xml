@@ -14,31 +14,37 @@
 
     </data>
 
-    <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-        <!--<com.google.android.material.appbar.AppBarLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:id="@+id/appBar"-->
-        <!--app:elevation="0dp"-->
-        <!--android:background="@color/colorPrimary"-->
-        <!--android:layout_height="?actionBarSize">-->
+        <!--<LinearLayout-->
 
-        <!--<androidx.appcompat.widget.Toolbar-->
-        <!--android:id="@+id/appToolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?actionBarSize"/>-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:orientation="vertical">-->
 
-        <!--</com.google.android.material.appbar.AppBarLayout>-->
+            <!--<com.google.android.material.appbar.AppBarLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:id="@+id/appBar"-->
+            <!--app:elevation="0dp"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--android:layout_height="?actionBarSize">-->
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/currenciesRv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <!--<androidx.appcompat.widget.Toolbar-->
+            <!--android:id="@+id/appToolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?actionBarSize"/>-->
 
-                android:clipToPadding="false"/>
+            <!--</com.google.android.material.appbar.AppBarLayout>-->
 
-    </FrameLayout>
+            <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/currenciesRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+
+            </RelativeLayout>
 
 </layout>

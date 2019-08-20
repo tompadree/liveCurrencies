@@ -71,7 +71,7 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
     fun fetchRates() { //base: String, baseValue: String, currentList: LinkedList<RatesListItem>) {
 
         viewModelScope.launch {
-//            while (true) {
+            while (true) {
                 delay(1_000)
                 val currentList = _currentList.value?: LinkedList()
                 val currentBase = currentBase.get()?: "EUR"
@@ -127,7 +127,7 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
                         handleError(response.t)
                     }
                 }
-//            }
+            }
         }
 
     }

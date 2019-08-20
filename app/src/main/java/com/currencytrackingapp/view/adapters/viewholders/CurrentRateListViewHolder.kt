@@ -33,7 +33,7 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
         itemCurrenciesLayout.setOnClickListener {
 //            if(!itemCurrenciesEtAmount.isFocused)
 //                hideKeyboard(activity)
-            onCurrencyListener.onItemClicked(position)
+            onCurrencyListener.onItemClicked(position, ratesListItem.name, itemCurrenciesEtAmount.text.toString())
             showKeyboard(activity)
             itemCurrenciesEtAmount.clearFocus()
             clearFocus(itemCurrenciesEtAmount, activity)
