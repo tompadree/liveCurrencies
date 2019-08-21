@@ -26,19 +26,11 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
     override val containerView: View? = view
     private var focusCleared = true
     private var lastPosition = 0
+    private var remainFocus = false
+    private var keyboardShown = false
 
     fun bindView(position: Int, activity: Activity, ratesListItem: RatesListItem, onCurrencyListener: OnCurrencyListener) {
-        Log.e("ADAPTER", "bindView")
-
-        itemCurrenciesLayout.setOnClickListener {
-//            if(!itemCurrenciesEtAmount.isFocused)
-//                hideKeyboard(activity)
-            onCurrencyListener.onItemClicked(position, ratesListItem.name, itemCurrenciesEtAmount.text.toString())
-            showKeyboard(activity)
-            itemCurrenciesEtAmount.clearFocus()
-            clearFocus(itemCurrenciesEtAmount, activity)
-            lastPosition = ratesListItem.currentRate.toString().length
-        }
+//        Log.e("ADAPTER", "bindView")
 
         itemCurrenciesTvISO.text = ratesListItem.name
 
@@ -49,16 +41,31 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
         itemCurrenciesEtAmount.setText(ratesListItem.currentRate.toString())
         itemCurrenciesEtAmount.clearFocus()
 
-        if (position == 0) {
-//            itemCurrenciesEtAmount.isEnabled = true
-            setEdiTextListeners(itemCurrenciesEtAmount, activity, onCurrencyListener)
-//            itemCurrenciesEtAmount.isEnabled = position == 0
-//            itemCurrenciesEtAmount.requestFocus()
-        }else {
+        itemCurrenciesLayout.setOnClickListener {
+//            if(!itemCurrenciesEtAmount.isFocused)
+//                hideKeyboard(activity)
+//
 //            itemCurrenciesEtAmount.clearFocus()
-            itemCurrenciesEtAmount.isEnabled = false
-//            hideKeyboard(activity)
+
+
+
+
+            onCurrencyListener.onItemClicked(position, ratesListItem.name, itemCurrenciesEtAmount.text.toString())
+//            showKeyboard(activity)
+//            if(itemCurrenciesEtAmount.isFocused || itemCurrenciesEtAmount.hasFocus())
+//                showKeyboard(activity)
+//            else
+//                hideKeyboard(activity)
+            itemCurrenciesEtAmount.clearFocus()
 //            clearFocus(itemCurrenciesEtAmount, activity)
+            focusCleared = true
+            lastPosition = ratesListItem.currentRate.toString().length
+        }
+
+        if (position == 0) {
+            setEdiTextListeners(itemCurrenciesEtAmount, activity, onCurrencyListener)
+        }else {
+            itemCurrenciesEtAmount.isEnabled = false
         }
 
 
@@ -73,7 +80,7 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
     }
 
 
-        private fun clearFocus(itemCurrenciesEtAmount: EditText, activity: Activity) {
+    private fun clearFocus(itemCurrenciesEtAmount: EditText, activity: Activity) {
         focusCleared = true
         itemCurrenciesEtAmount.clearFocus()
         hideKeyboard(activity)
@@ -89,6 +96,8 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
         if(imm.isAcceptingText)
             itemCurrenciesEtAmount.requestFocus()
 
+        keyboardShown = true
+
     }
 
     fun hideKeyboard(activity: Activity) {
@@ -96,20 +105,26 @@ class CurrentRateListViewHolder(view: View) : RecyclerView.ViewHolder(view), Lay
 
         (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
             .hideSoftInputFromWindow(view?.windowToken ?: return, 0)
+
+        keyboardShown = false
     }
 
     private fun setEdiTextListeners(itemCurrenciesEtAmount: EditText, activity: Activity, onCurrencyListener: OnCurrencyListener) {
+
         itemCurrenciesEtAmount.isEnabled = true
 
-//        if(!itemCurrenciesEtAmount.hasFocus())
+//        if(!itemCurrenciesEtAmount.hasFocus() || !itemCurrenciesEtAmount.isFocused)
+//        if(keyboardShown) {
 //            itemCurrenciesEtAmount.requestFocus()
+//            showKeyboard(activity)
+//        }
 
         itemCurrenciesEtAmount.onFocusChangeListener = View.OnFocusChangeListener { p0, p1 ->
             if (!focusCleared) {
-//                if(!itemCurrenciesEtAmount.hasFocus())
+//                if(!itemCurrenciesEtAmount.isFocused)
+//                showKeyboard(activity)
                 itemCurrenciesEtAmount.requestFocus()
                 itemCurrenciesEtAmount.setSelection(lastPosition)
-                showKeyboard(activity)
                 Log.e("ADAPTER", "OnFocusChaner1")
             }
             else

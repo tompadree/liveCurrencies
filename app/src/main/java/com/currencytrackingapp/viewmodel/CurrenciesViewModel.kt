@@ -88,12 +88,17 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
                             if (!isInit) {
                                 returnList.addFirst(RatesListItem(currentBase, currentValue.toDouble()))
                                 for (i in 1 until currentList.size) {
-                                    returnList.add(
-                                        RatesListItem(
-                                            currentList[i].name,
-                                            roundOffDecimal(currentValue.toDouble() * it.rates[currentList[i].name]!!)
-                                        )
-                                    )
+                                    try {
+                                        if(it.rates.containsKey(currentList[i].name))
+                                        returnList.add(RatesListItem(currentList[i].name, roundOffDecimal(currentValue.toDouble() * it.rates[currentList[i].name]!!)))
+                                    } catch ( e: Exception) {
+                                        e.printStackTrace()
+                                        Log.e("ERROR", "currentList[i].name = " + currentList[i].name)
+                                        for(rate in it.rates)
+                                        {
+                                            Log.e("ERROR", "rate = $rate")
+                                        }// + "  it.rates[currentList[i].name]!! = " + it.rates[currentList[i].name])
+                                    }
 //                                returnList[i].currentRate = baseValue.toDouble() * it.rates[currentList[i].name]!!
 //                                returnList[i].currentRate = roundOffDecimal(currentList[i].currentRate)
                                 }
