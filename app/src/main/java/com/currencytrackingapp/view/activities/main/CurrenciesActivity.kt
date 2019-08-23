@@ -16,6 +16,9 @@ import kotlinx.android.synthetic.main.activity_currencies_main.*
 import org.koin.standalone.inject
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.currencytrackingapp.view.adapters.CurrentRatesListAdapter
+import android.view.ViewTreeObserver
+import android.graphics.Rect
+import android.util.Log
 
 
 class CurrenciesActivity : BindingActivity<ActivityCurrenciesMainBinding>(), OnCurrencyListener {
@@ -35,7 +38,6 @@ class CurrenciesActivity : BindingActivity<ActivityCurrenciesMainBinding>(), OnC
 
         setView()
         observeViewModel()
-
     }
 
 
@@ -90,6 +92,7 @@ class CurrenciesActivity : BindingActivity<ActivityCurrenciesMainBinding>(), OnC
             })
 
             (currenciesRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            currenciesRv.itemAnimator = null
         }
     }
 

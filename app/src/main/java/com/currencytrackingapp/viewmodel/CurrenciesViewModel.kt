@@ -76,7 +76,7 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
                 val currentList = _currentList.value?: LinkedList()
                 val currentBase = currentBase.get()?: "EUR"
                 val currentValue = currentValue.get()?: "100"
-                Log.e("TEST", "COROUTINE FIRED")
+
                 when (val response = RequestExecutor.execute(networkApi.getLatestRates(currentBase))) { /*TODO BASE*/
                     is ResponseSucces -> {
 

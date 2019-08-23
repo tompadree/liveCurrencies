@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.currencytrackingapp.R
 import com.currencytrackingapp.data.models.RatesListItem
 import com.currencytrackingapp.view.adapters.diffUtil.RatesDiffUtil
-import com.currencytrackingapp.view.adapters.viewholders.CurrentRateListViewHolder
 import com.currencytrackingapp.view.listeners.OnCurrencyListener
 import java.util.*
 import androidx.recyclerview.widget.DiffUtil
@@ -37,7 +36,7 @@ class CurrentRatesAdapter (
                 R.layout.item_currencies,
                 parent,
                 false
-            )
+            ), activity
         )
 
     }
