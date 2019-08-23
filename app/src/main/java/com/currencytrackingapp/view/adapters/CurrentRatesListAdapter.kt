@@ -67,13 +67,14 @@ class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerVi
     private var wasTyping = false
 
     init {
-        initKeyBoardListener()
+
     }
 
 
     fun bindView(position: Int, ratesListItem: RatesListItem, onCurrencyListener: OnCurrencyListener) {
 //        Log.e("ADAPTER", "bindView")
 
+        initKeyBoardListener(itemCurrenciesEtAmount)
         itemCurrenciesTvISO.text = ratesListItem.name
 
         itemCurrenciesTvName.text = activity.getString(CountryHelper.getNameForISO(ratesListItem.name))
@@ -88,12 +89,15 @@ class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerVi
 
         itemCurrenciesLayout.setOnClickListener {
 
-//                        itemCurrenciesEtAmount.clearFocus()
+//                        itemCurrenciesEtAmount.requestFocus()
 //            clearFocus(itemCurrenciesEtAmount, activity)
 //            hideKeyboard(activity)
             onCurrencyListener.onItemClicked(position, ratesListItem.name, itemCurrenciesEtAmount.text.toString())
 //            keyboardShown = false
             lastPosition = ratesListItem.currentRate.toString().length
+
+            if(keyboardShown)
+                itemCurrenciesEtAmount.performClick()
         }
 
         if (position == 0) {
@@ -192,7 +196,7 @@ class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerVi
     private fun clearFocus(itemCurrenciesEtAmount: EditText) {
         focusCleared = true
         itemCurrenciesEtAmount.clearFocus()
-        hideKeyboard()
+//        hideKeyboard()
         wasTyping = false
     }
 
@@ -227,7 +231,7 @@ class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerVi
 
     fun unbindView() {}
 
-    private fun initKeyBoardListener() {
+    private fun initKeyBoardListener(itemCurrenciesEtAmount: EditText) {
         // Threshold for minimal keyboard height.
         val MIN_KEYBOARD_HEIGHT_PX = 150
         // Top-level window decor view.
@@ -246,9 +250,11 @@ class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerVi
                     if (lastVisibleDecorViewHeight > visibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX) {
                         Log.e("Pasha", "SHOW")
                         keyboardShown = true
+                        itemCurrenciesEtAmount.requestFocus()
                     } else if (lastVisibleDecorViewHeight + MIN_KEYBOARD_HEIGHT_PX < visibleDecorViewHeight) {
                         Log.e("Pasha", "HIDE")
                         keyboardShown = false
+                        itemCurrenciesEtAmount.clearFocus()
                     }
                 }
                 // Save current decor view height for the next call.
