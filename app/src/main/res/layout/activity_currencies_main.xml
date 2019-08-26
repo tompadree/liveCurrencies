@@ -15,36 +15,16 @@
     </data>
 
 
-        <!--<LinearLayout-->
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:orientation="vertical">-->
-
-            <!--<com.google.android.material.appbar.AppBarLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:id="@+id/appBar"-->
-            <!--app:elevation="0dp"-->
-            <!--android:background="@color/colorPrimary"-->
-            <!--android:layout_height="?actionBarSize">-->
-
-            <!--<androidx.appcompat.widget.Toolbar-->
-            <!--android:id="@+id/appToolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="?actionBarSize"/>-->
-
-            <!--</com.google.android.material.appbar.AppBarLayout>-->
-
-            <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/currenciesRv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/currenciesRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
 
-            </RelativeLayout>
+    </RelativeLayout>
 
 </layout>

@@ -1,18 +1,15 @@
 package com.currencytrackingapp.di
 
 import android.app.Activity
+import androidx.fragment.app.FragmentActivity
 import com.currencytrackingapp.view.activities.ActivityManager
 import com.currencytrackingapp.view.activities.ActivityManagerImpl
+import com.currencytrackingapp.view.dialogs.DialogManager
+import com.currencytrackingapp.view.dialogs.DialogManagerImpl
 import org.koin.dsl.module.module
 
 val AppModule = module {
-
-//    factory { (containerId: Int, fm: androidx.fragment.app.FragmentManager) ->
-//        FragmentManagerImpl(containerId, fm) as FragmentManager
-//    }
     factory { (activity: Activity) -> ActivityManagerImpl(activity) as ActivityManager }
-//    factory { (activity: FragmentActivity) -> DialogManagerImpl(activity) as DialogManager}
-
-//    factory { (fm: androidx.fragment.app.FragmentManager) -> DossiersBerichtenPageAdapter(fm)}
+    factory { (activity: FragmentActivity) -> DialogManagerImpl(activity) as DialogManager }
 
 }

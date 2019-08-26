@@ -20,9 +20,6 @@ import java.util.concurrent.TimeUnit
 
 val NetModule = module {
 
-//    single { Auth() }
-//    single { AppConfig(get()) }
-
     factory { NotAuthorizedHandlerImpl(get()) as NotAuthorizedHandler }
 
     single {
@@ -51,11 +48,8 @@ val NetModule = module {
             .build()
             .create(RevolutApi::class.java)) as RevolutApi
     }
-//
+
     single { NetworkApiImpl(get()) as NetworkApi }
     factory { InternetConnectionManagerImpl(get()) as InternetConnectionManager }
-//
-//    single { LoginRepositoryImpl(get(), get()) as LoginRepository }
-//    single { MainRepositoryImpl(get(), get()) as MainRepository }
 
 }

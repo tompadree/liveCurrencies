@@ -1,20 +1,31 @@
 package com.currencytrackingapp.view.activities
 
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.LiveData
 import com.currencytrackingapp.R
 import com.currencytrackingapp.utils.network.InternetConnectionException
+import com.currencytrackingapp.utils.network.InternetConnectionManager
 import com.currencytrackingapp.utils.network.NetworkException
 import com.currencytrackingapp.utils.observe
 import com.currencytrackingapp.view.dialogs.DialogManager
+import com.currencytrackingapp.view.dialogs.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
+import org.koin.standalone.inject
 import kotlin.coroutines.CoroutineContext
+import android.widget.TextView
+import android.R.id
+
+
 
 abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope {
 
@@ -23,10 +34,18 @@ abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope
         get() = activityContextJob + Dispatchers.Main
 
     private var dialogManager: DialogManager? = null
-//    private var loadingDialog: LoadingDialog? = null
+    private var loadingDialog: LoadingDialog? = null
+
+    private val internetConnectionManager: InternetConnectionManager by inject()
+    lateinit var internetReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(internetReceiver)
     }
 
     protected open fun observeLoading(loadingLiveData: LiveData<Boolean>) {
@@ -57,19 +76,23 @@ abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope
     }
 
     protected open fun showError(error: String?) {
+        if(!getDialogManager().isDialogShown())
+            return
         if (error != null) {
-            getDialogManager().openOneButtonDialog(R.string.ok, error, true)
+            getDialogManager().openOneButtonDialog(R.string.ok, error, true) { getDialogManager().dismissAll()}
         } else {
             showUnknownError()
         }
     }
 
     protected open fun showError(errorTitle: String, errorMessage: String) {
-        getDialogManager().openOneButtonDialog(R.string.ok, errorTitle, errorMessage, true)
+        if(!getDialogManager().isDialogShown())
+            getDialogManager().openOneButtonDialog(R.string.ok, errorTitle, errorMessage, true) { getDialogManager().dismissAll()}
     }
 
     protected open fun showUnknownError() {
-        getDialogManager().openOneButtonDialog(R.string.ok, R.string.error_default, true)
+        if(!getDialogManager().isDialogShown())
+            getDialogManager().openOneButtonDialog(R.string.ok, R.string.error_default, true) { getDialogManager().dismissAll()}
     }
 
     protected fun getDialogManager(): DialogManager {
@@ -80,18 +103,25 @@ abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope
         return dialogManager!!
     }
 
-    /*TODO*/
     private fun showLoading() {
-//        loadingDialog?.let {
-//            if (it.isShowing) return
-//            it.show()
-//        } ?: run {
-//            loadingDialog = LoadingDialog(this)
-//            loadingDialog?.show()
-//        }
+        loadingDialog?.let {
+            if (it.isShowing) return
+            it.show()
+        } ?: run {
+            loadingDialog = LoadingDialog(this)
+            loadingDialog?.show()
+        }
     }
 
     private fun hideLoading() {
-//        loadingDialog?.dismiss()
+        loadingDialog?.dismiss()
+    }
+
+    protected open fun showSnackbar(parentLayout: View){
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        internetReceiver = internetConnectionManager.isInternetAvailable(parentLayout)
+        registerReceiver(internetReceiver, intentFilter)
     }
 }

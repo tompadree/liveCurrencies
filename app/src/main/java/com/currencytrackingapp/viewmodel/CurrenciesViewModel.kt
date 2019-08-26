@@ -1,6 +1,5 @@
 package com.currencytrackingapp.viewmodel
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +14,7 @@ import com.currencytrackingapp.data.models.ResponseSucces
 import com.currencytrackingapp.utils.RequestExecutor
 import com.currencytrackingapp.utils.SingleLiveEvent
 import com.currencytrackingapp.utils.helpers.AppUtils
+import com.currencytrackingapp.utils.network.InternetConnectionException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.standalone.KoinComponent
@@ -22,7 +22,6 @@ import org.koin.standalone.inject
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CurrenciesViewModel : BaseViewModel(), KoinComponent {
 
@@ -39,16 +38,33 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
 
     val currentBase = ObservableField<String>("EUR")
     val currentValue = ObservableField<String>("100")
+    val fetchingFlag = ObservableField<Boolean>(false)
 
     private val userObserver = Observer<Rates> {
         currentRatesUpdatedEvent.postCall()
     }
 
     init {
+        showLoading(true)
         _currentList.value = LinkedList()
         currentRates.observeForever(userObserver)
+        fetchingFlag.set(true)
         fetchRates()
     }
+
+    fun resume(){
+        fetchingFlag.set(true)
+    }
+
+    fun pause(){
+        fetchingFlag.set(false)
+    }
+
+    fun destroy() {
+        fetchingFlag.set(false)
+        onCleared()
+    }
+
 
     override fun onCleared() {
         try {
@@ -58,20 +74,10 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
         }
     }
 
-    fun fetchRatesCOnstant() {
-        viewModelScope.launch {
-            while(true) {
-                delay(1_000)
-                // do something every second
-                Log.e("TEST", "COROUTINE FIRED")
-            }
-        }
-    }
-
-    fun fetchRates() { //base: String, baseValue: String, currentList: LinkedList<RatesListItem>) {
+    fun fetchRates() {
 
         viewModelScope.launch {
-            while (true) {
+            while (fetchingFlag.get() == true) {
                 delay(1_000)
                 val currentList = _currentList.value?: LinkedList()
                 val currentBase = currentBase.get()?: "EUR"
@@ -92,28 +98,14 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
                                         if(it.rates.containsKey(currentList[i].name))
                                         returnList.add(RatesListItem(currentList[i].name, roundOffDecimal(currentValue.toDouble() * it.rates[currentList[i].name]!!)))
                                     } catch ( e: Exception) {
-                                        e.printStackTrace()
-                                        Log.e("ERROR", "currentList[i].name = " + currentList[i].name)
-                                        for(rate in it.rates)
-                                        {
-                                            Log.e("ERROR", "rate = $rate")
-                                        }// + "  it.rates[currentList[i].name]!! = " + it.rates[currentList[i].name])
+                                        fail(e)
                                     }
-//                                returnList[i].currentRate = baseValue.toDouble() * it.rates[currentList[i].name]!!
-//                                returnList[i].currentRate = roundOffDecimal(currentList[i].currentRate)
                                 }
                             } else {
-
                                 returnList.addFirst(RatesListItem(appUtils.getString(R.string.eur_), 100.00))
                                 for (item in it.rates) {
-//                                if (item.key == it.base)
-//                                    currentList.addFirst(RatesListItem(item.key, 100.00))
-//                                else
-
                                     returnList.add(RatesListItem(item.key, roundOffDecimal(item.value * 100)))
-
                                 }
-
                             }
 
                             val sorted = when (isInit) {
@@ -123,13 +115,17 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
 
                             _currentList.value = sorted
                             _ratesListFetched.postValue(sorted)
+                            showLoading(false)
+                            postLoading(false)
                         }
 
                     }
                     is ResponseError -> {
+                        showLoading(false)
                         fail(response.t as Exception)
                         postLoading(false)
-                        handleError(response.t)
+                        if(response.t !is InternetConnectionException)
+                            handleError(response.t)
                     }
                 }
             }
@@ -150,26 +146,19 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
         return df.format(number).toDouble()
     }
 
-
-    data class MyDate(val year: Int, val month: Int, val day: Int)
-
     private fun fail(e: Exception?) {
-        postLoading(false)
-//        if (e is UserNotConfirmedException) {
-//            openVerificationOpenAccount.value = login
-//        } else {
         resetError()
-//        _logoutError.postValue(e)
-//        }
+
     }
 
     private fun resetError() {
-//        _logoutError.postValue(null)
-//        passwordError.set(null)
     }
 
-    fun showLoading(show: Boolean) {
+    fun showLoading(show: Boolean){
         setLoading(show)
+
     }
+
+
 
 }

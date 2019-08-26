@@ -44,16 +44,6 @@ abstract class BaseViewModel: ViewModel(), CoroutineScope {
         }
     }
 
-    //    protected fun <T> handleResponseWithError(response: GatewayResponse<T>): T? {
-//        return when (response) {
-//            is GatewayResponseSuccess -> response.data
-//            is GatewayResponseError -> {
-//                _error.postValue(response.error)
-//                null
-//            }
-//        }
-//    }
-//
     protected fun <T> handleResponseWithError(response: Response<T>): T? {
         return when (response) {
             is ResponseSucces -> response.data

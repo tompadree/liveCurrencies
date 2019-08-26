@@ -41,7 +41,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3' //dependencies.supportConstraint
     implementation 'androidx.cardview:cardview:1.0.0' //dependencies.supportCardView
     implementation 'com.google.android.material:material:1.1.0-alpha09' //dependencies.supportDesign
-    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta01' //dependencies.supportRv
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-beta03' //dependencies.supportRv
     implementation 'androidx.paging:paging-runtime:2.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.exifinterface:exifinterface:1.0.0'
@@ -53,11 +53,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}" //dependencies.kotlinReflect
 
     // AAC
-    implementation "androidx.lifecycle:lifecycle-runtime:2.2.0-alpha02" //dependencies.lifecycleRuntume
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02" //dependencies.lifecycleExtensions
+    implementation "androidx.lifecycle:lifecycle-runtime:2.2.0-alpha03" //dependencies.lifecycleRuntume
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha03" //dependencies.lifecycleExtensions
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha02" //dependencies.lifecycleCompiler
-    implementation group: 'androidx.lifecycle', name:'lifecycle-viewmodel-ktx', version: '2.2.0-alpha02'
+    kapt "androidx.lifecycle:lifecycle-compiler:2.2.0-alpha03" //dependencies.lifecycleCompiler
+    implementation group: 'androidx.lifecycle', name:'lifecycle-viewmodel-ktx', version: '2.2.0-alpha03'
 
 
     // Room
@@ -98,6 +98,8 @@ dependencies {
     implementation "de.hdodenhof:circleimageview:3.0.0" // dependencies.circleImageView
     implementation "com.github.bumptech.glide:glide:4.9.0"
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
+    implementation "pl.droidsonroids.gif:android-gif-drawable:1.2.16"
+
 
     // Rx
     implementation "io.reactivex.rxjava2:rxandroid:2.0.2" // dependencies.rxandroid

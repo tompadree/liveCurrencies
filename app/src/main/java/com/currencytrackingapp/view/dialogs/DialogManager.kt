@@ -34,16 +34,7 @@ interface DialogManager {
         onClickOk: (() -> Unit)? = null
     )
 
-    fun openTwoButtonsDialog(
-        titleText: String?,
-        messageText: String?,
-        positiveButtonName: String,
-        negativeButtonName: String,
-        cancelable: Boolean = false,
-        onPositiveButtonClick: (() -> Unit)? = null,
-        onNegativeButtonClick: (() -> Unit)? = null,
-        onCancel: (() -> Unit)? = null
-    )
-
     fun dismissAll()
+
+    fun isDialogShown() : Boolean
 }
