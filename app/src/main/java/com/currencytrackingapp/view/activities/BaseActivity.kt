@@ -11,7 +11,7 @@ import com.currencytrackingapp.R
 import com.currencytrackingapp.utils.network.InternetConnectionException
 import com.currencytrackingapp.utils.network.InternetConnectionManager
 import com.currencytrackingapp.utils.network.NetworkException
-import com.currencytrackingapp.utils.observe
+import com.currencytrackingapp.utils.helpers.observe
 import com.currencytrackingapp.view.dialogs.DialogManager
 import com.currencytrackingapp.view.dialogs.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
@@ -22,10 +22,6 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
 import org.koin.standalone.inject
 import kotlin.coroutines.CoroutineContext
-import android.widget.TextView
-import android.R.id
-
-
 
 abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope {
 
@@ -37,7 +33,7 @@ abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope
     private var loadingDialog: LoadingDialog? = null
 
     private val internetConnectionManager: InternetConnectionManager by inject()
-    lateinit var internetReceiver: BroadcastReceiver
+    private lateinit var internetReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +91,7 @@ abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope
             getDialogManager().openOneButtonDialog(R.string.ok, R.string.error_default, true) { getDialogManager().dismissAll()}
     }
 
-    protected fun getDialogManager(): DialogManager {
+    private fun getDialogManager(): DialogManager {
         if (dialogManager == null) {
             dialogManager = get { parametersOf(this) }
         }

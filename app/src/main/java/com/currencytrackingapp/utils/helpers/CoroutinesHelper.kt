@@ -1,4 +1,4 @@
-package com.currencytrackingapp.utils
+package com.currencytrackingapp.utils.helpers
 
 import android.os.Handler
 import androidx.lifecycle.LifecycleOwner

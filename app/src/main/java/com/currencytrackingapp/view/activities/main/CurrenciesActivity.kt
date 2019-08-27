@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.currencytrackingapp.R
 import com.currencytrackingapp.databinding.ActivityCurrenciesMainBinding
-import com.currencytrackingapp.utils.observe
+import com.currencytrackingapp.utils.helpers.observe
 import com.currencytrackingapp.view.activities.BindingActivity
 import com.currencytrackingapp.view.listeners.OnCurrencyListener
 import com.currencytrackingapp.viewmodel.CurrenciesViewModel

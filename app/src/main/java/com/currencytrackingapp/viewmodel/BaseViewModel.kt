@@ -55,12 +55,10 @@ abstract class BaseViewModel: ViewModel(), CoroutineScope {
     }
 
     protected open fun handleError(error: Throwable) {
-        Log.d(TAG, error.localizedMessage ?: "error")
         _error.postValue(error)
     }
 
     override fun onCleared() {
-        Log.d(TAG, "onCleared")
         try {
             cancelJob.cancelChildren()
             cancelJob.cancel()

@@ -7,23 +7,6 @@ import java.io.IOException
 
 class NetworkException(response: okhttp3.Response?) : IOException() {
 
-
-//    private var errors: NetworkErrors? = response?.let { handleResponse(response) }
-//    override var message: String = getErrors()?.message ?: "Some error"
-//
-//
-//    private fun handleResponse(response: Response): NetworkErrors? {
-//        return try {
-//            val errorBodyJson = response.body()?.string() ?: "{}"
-//            Gson().fromJson(errorBodyJson, NetworkErrors::class.java)
-//        } catch (e: Exception) {
-//            null
-//        }
-//    }
-//
-//    fun getErrors(): NetworkErrors? {
-//        return errors
-//    }
     private val localResponse: okhttp3.Response? = response
     private var errors: NetworkErrors? = localResponse?.let { handleResponse(localResponse) }
     override var message: String = localResponse?.let { getMessage(localResponse) } ?: "Some error"

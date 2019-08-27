@@ -16,15 +16,13 @@ import com.google.android.material.snackbar.Snackbar
 
 class InternetConnectionManagerImpl(private val context: Context) : InternetConnectionManager {
 
+    var isInternetOn = true
+
     override fun hasInternetConnection(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
 
         return cm!!.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected
     }
-
-    var isInternetOn = true
-
-//        companion object {
 
 
             override fun isInternetAvailable(mParentLayout: View): BroadcastReceiver {
@@ -42,18 +40,15 @@ class InternetConnectionManagerImpl(private val context: Context) : InternetConn
 
                         val state = info.state
 
-                        if (state == NetworkInfo.State.CONNECTED) {
+                        isInternetOn = if (state == NetworkInfo.State.CONNECTED) {
                             noIntSnaBar.dismiss()
-                            isInternetOn = true
+                            true
                         } else {
                             noIntSnaBar.show()
-                            isInternetOn = false
+                            false
                         }
                     }
                 }
             }
-
-//        }
-
 
 }

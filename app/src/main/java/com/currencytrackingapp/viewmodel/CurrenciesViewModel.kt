@@ -11,7 +11,7 @@ import com.currencytrackingapp.data.models.Rates
 import com.currencytrackingapp.data.models.RatesListItem
 import com.currencytrackingapp.data.models.ResponseError
 import com.currencytrackingapp.data.models.ResponseSucces
-import com.currencytrackingapp.utils.RequestExecutor
+import com.currencytrackingapp.utils.helpers.RequestExecutor
 import com.currencytrackingapp.utils.SingleLiveEvent
 import com.currencytrackingapp.utils.helpers.AppUtils
 import com.currencytrackingapp.utils.network.InternetConnectionException
@@ -28,12 +28,12 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
     private val networkApi: NetworkApi by inject()
     private val appUtils: AppUtils by inject()
 
-    val currentRates = MutableLiveData<Rates>()
+    private val currentRates = MutableLiveData<Rates>()
     private val currentRatesUpdatedEvent = SingleLiveEvent<Unit>()
 
     val _currentList = MutableLiveData<LinkedList<RatesListItem>>()
 
-    val _ratesListFetched = MutableLiveData<LinkedList<RatesListItem>>()
+    private val _ratesListFetched = MutableLiveData<LinkedList<RatesListItem>>()
     val ratesListFetched: LiveData<LinkedList<RatesListItem>> get() = _ratesListFetched
 
     val currentBase = ObservableField<String>("EUR")
@@ -74,7 +74,7 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
         }
     }
 
-    fun fetchRates() {
+    private fun fetchRates() {
 
         viewModelScope.launch {
             while (fetchingFlag.get() == true) {
@@ -134,7 +134,7 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
     }
 
     private fun firstTimeSorting(base: String, returnList: LinkedList<RatesListItem>): LinkedList<RatesListItem> {
-        val sorted = LinkedList<RatesListItem>(returnList.sortedWith(compareBy({ it.name })))
+        val sorted = LinkedList<RatesListItem>(returnList.sortedWith(compareBy { it.name }))
         sorted.remove(RatesListItem(base, 100.00))
         sorted.addFirst(RatesListItem(base, 100.00))
         return sorted
@@ -154,7 +154,7 @@ class CurrenciesViewModel : BaseViewModel(), KoinComponent {
     private fun resetError() {
     }
 
-    fun showLoading(show: Boolean){
+    private fun showLoading(show: Boolean){
         setLoading(show)
 
     }

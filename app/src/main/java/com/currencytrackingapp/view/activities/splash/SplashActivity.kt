@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.currencytrackingapp.R
 import com.currencytrackingapp.common.AppConstants.Companion.SPLASH_DISPLAY_LENGTH
-import com.currencytrackingapp.utils.delay
+import com.currencytrackingapp.utils.helpers.delay
 import com.currencytrackingapp.view.activities.ActivityManager
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
