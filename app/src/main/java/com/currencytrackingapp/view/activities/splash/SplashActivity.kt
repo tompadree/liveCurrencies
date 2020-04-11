@@ -7,10 +7,10 @@ import com.currencytrackingapp.common.AppConstants.Companion.SPLASH_DISPLAY_LENG
 import com.currencytrackingapp.utils.helpers.delay
 import com.currencytrackingapp.view.activities.ActivityManager
 import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
 
-class SplashActivity : AppCompatActivity(), KoinComponent {
+import org.koin.android.ext.android.inject
+
+class SplashActivity : AppCompatActivity(){ //, KoinComponent {
 
     private val activityManager: ActivityManager by inject { parametersOf(this) }
 

@@ -17,16 +17,15 @@ import com.currencytrackingapp.utils.helpers.AppUtils
 import com.currencytrackingapp.utils.network.InternetConnectionException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.inject
+import org.koin.android.ext.android.inject
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
 
-class CurrenciesViewModel : BaseViewModel(), KoinComponent {
+class CurrenciesViewModel(private val networkApi: NetworkApi, private val appUtils: AppUtils) : BaseViewModel() { //, KoinComponent {
 
-    private val networkApi: NetworkApi by inject()
-    private val appUtils: AppUtils by inject()
+//    private val networkApi: NetworkApi by inject()
+//    private val appUtils: AppUtils by inject()
 
     private val currentRates = MutableLiveData<Rates>()
     private val currentRatesUpdatedEvent = SingleLiveEvent<Unit>()

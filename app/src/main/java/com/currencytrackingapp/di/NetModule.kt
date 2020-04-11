@@ -7,11 +7,13 @@ import com.currencytrackingapp.data.api.APIConstants.Companion.SERVER_URL
 import com.currencytrackingapp.data.api.RevolutApi
 import com.currencytrackingapp.utils.network.*
 import com.currencytrackingapp.utils.network.NotAuthorizedHandler
+import com.currencytrackingapp.viewmodel.CurrenciesViewModel
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.dsl.module.module
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,7 +30,7 @@ val NetModule = module {
             .connectTimeout(40, TimeUnit.SECONDS)
             .addInterceptor(ResponseInterceptor(get(), get())).apply {
                 if (BuildConfig.DEBUG) {
-                    val loggingInterceptor = HttpLoggingInterceptor()
+                    var loggingInterceptor = HttpLoggingInterceptor()
                     loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
                     addInterceptor(loggingInterceptor)
                 }
@@ -52,4 +54,7 @@ val NetModule = module {
     single { NetworkApiImpl(get()) as NetworkApi }
     factory { InternetConnectionManagerImpl(get()) as InternetConnectionManager }
 
+
+
 }
+
