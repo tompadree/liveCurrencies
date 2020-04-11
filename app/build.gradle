@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.1"
+    buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.currencytrackingapp"
         minSdkVersion 21
@@ -87,7 +87,7 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1" // dependencies.multidexLib
 
     //EasyPermissions
-    implementation "pub.devrel:easypermissions:2.0.0" // dependencies.easyPermissionsLib
+//    implementation "pub.devrel:easypermissions:2.0.0" // dependencies.easyPermissionsLib
 
     //Timber
     implementation "com.jakewharton.timber:timber:4.7.1" // dependencies.timber

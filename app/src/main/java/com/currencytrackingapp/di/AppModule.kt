@@ -11,5 +11,4 @@ import org.koin.dsl.module.module
 val AppModule = module {
     factory { (activity: Activity) -> ActivityManagerImpl(activity) as ActivityManager }
     factory { (activity: FragmentActivity) -> DialogManagerImpl(activity) as DialogManager }
-
 }

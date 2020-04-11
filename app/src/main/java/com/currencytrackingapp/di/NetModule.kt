@@ -6,7 +6,7 @@ import com.currencytrackingapp.BuildConfig
 import com.currencytrackingapp.data.api.APIConstants.Companion.SERVER_URL
 import com.currencytrackingapp.data.api.RevolutApi
 import com.currencytrackingapp.utils.network.*
-import com.flexfrontbv.flexfastapp.utils.network.NotAuthorizedHandler
+import com.currencytrackingapp.utils.network.NotAuthorizedHandler
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient

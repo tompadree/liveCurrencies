@@ -1,4 +1,4 @@
-package com.flexfrontbv.flexfastapp.utils.network
+package com.currencytrackingapp.utils.network
 
 interface NotAuthorizedHandler {
 
