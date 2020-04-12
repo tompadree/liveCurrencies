@@ -8,6 +8,11 @@ import androidx.annotation.MainThread
 import androidx.annotation.Nullable
 import java.util.concurrent.atomic.AtomicBoolean
 
+/** SingleLiveEvent is a lifecycle-aware observable that sends only new updates after subscription
+ *  and it will call the observable only if there's an explicit call to setValue() or call().
+ *  Note that only one observer is going to be notified of changes.
+ */
+
 class SingleLiveEvent<T> : MutableLiveData<T>() {
     private val TAG = "SingleLiveEvent"
 

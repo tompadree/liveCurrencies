@@ -17,13 +17,13 @@ import com.currencytrackingapp.view.dialogs.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.get
-import org.koin.standalone.inject
+
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseActivity : AppCompatActivity(), KoinComponent, CoroutineScope {
+abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
 
     private val activityContextJob = Job()
     override val coroutineContext: CoroutineContext

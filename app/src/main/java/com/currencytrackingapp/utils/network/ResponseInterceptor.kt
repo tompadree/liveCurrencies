@@ -1,6 +1,5 @@
 package com.currencytrackingapp.utils.network
 
-import com.flexfrontbv.flexfastapp.utils.network.NotAuthorizedHandler
 import okhttp3.Interceptor
 import okhttp3.Response
 
