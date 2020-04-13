@@ -3,7 +3,7 @@ package com.currencytrackingapp.utils.network
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import com.currencytrackingapp.view.activities.splash.SplashActivity
+import com.currencytrackingapp.splash.SplashActivity
 
 class NotAuthorizedHandlerImpl(
     private val applicationContext: Context

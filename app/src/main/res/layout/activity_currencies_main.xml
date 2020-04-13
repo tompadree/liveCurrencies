@@ -7,7 +7,7 @@
 
         <variable
                 name="viewModel"
-                type="com.currencytrackingapp.viewmodel.CurrenciesViewModel"
+                type="com.currencytrackingapp.currencies.CurrenciesViewModel"
         />
 
     </data>

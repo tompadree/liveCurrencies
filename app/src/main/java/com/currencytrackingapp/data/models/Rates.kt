@@ -1,12 +1,17 @@
 package com.currencytrackingapp.data.models
 
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.google.gson.Gson
+import com.google.gson.JsonElement
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 
-data class Rates (
+@Entity(tableName = "ratesObject")
+ class RatesObject (
+
+    @PrimaryKey(autoGenerate = true)
+    var id : Int = 1,
 
     @SerializedName("base")
     var base: String = "",
@@ -14,11 +19,12 @@ data class Rates (
     @SerializedName("date")
     var date: String = "",
 
+    @ColumnInfo(name = "rates")
     @TypeConverters(RatesConverter::class)
     @SerializedName("rates")
-    var rates: HashMap<String, Double>,
+    var rates: HashMap<String, Double>
 
-    var ratesSorted: ArrayList<RatesListItem>
+//    var ratesSorted: ArrayList<RatesListItem>
 
 )
 
@@ -30,14 +36,19 @@ data class RatesListItem(
 )
 
 class RatesConverter {
-    val gson = Gson()
+    companion object {
+        val gson = Gson()
 
-    @TypeConverter
-    fun stringToRates(value: String): HashMap<String, String> =
-        gson.fromJson(value, object : TypeToken<HashMap<String, String>>() {}.type)
+        @TypeConverter
+        @JvmStatic
+        fun stringToRates(value: String): HashMap<String, Double> =
+            gson.fromJson(value, object : TypeToken<HashMap<String, Double>>() {}.type)
 
 
-    @TypeConverter
-    fun fromRatesToString(levels: HashMap<String, String>) = Gson().toJson(levels)
+        @TypeConverter
+        @JvmStatic
 
+        fun fromRatesToString(levels: HashMap<String, Double>) = Gson().toJson(levels)
+
+    }
 }

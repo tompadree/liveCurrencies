@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+                name="countryHelper"
+                type="com.currencytrackingapp.utils.helpers.CountryHelper" />
+
+        <variable
+                name="ratesItem"
+                type="com.currencytrackingapp.data.models.RatesListItem" />
+
+        <variable
+                name="viewModel"
+                type="com.currencytrackingapp.currencies.CurrenciesViewModel" />
+    </data>
+
+    <RelativeLayout
+            android:id="@+id/itemCurrenciesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/itemCurrenciesIvFlag"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="30dp"
+                app:imageName="@{ratesItem.name}"/>
+
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/itemCurrenciesIvFlag"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/itemCurrenciesTvISO"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:text="@{ratesItem.name}"
+                    tools:text="@string/dummy_number" />
+
+            <TextView
+                    android:id="@+id/itemCurrenciesTvName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="14sp"
+                    app:subTitleName="@{ratesItem.name}"
+                    tools:text="@string/dummy_number" />
+
+        </LinearLayout>
+
+
+        <EditText
+                android:id="@+id/itemCurrenciesEtAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:enabled="false"
+                android:imeOptions="actionDone"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@drawable/et_disabled_color"
+                android:text="@{String.valueOf(ratesItem.currentRate)}"
+                tools:text="@string/dummy_number" />
+
+    </RelativeLayout>
+
+</layout>

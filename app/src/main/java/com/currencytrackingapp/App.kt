@@ -5,9 +5,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDexApplication
-import com.currencytrackingapp.di.AppModule
-import com.currencytrackingapp.di.DataModule
-import com.currencytrackingapp.di.NetModule
+import com.currencytrackingapp.di.*
 import org.koin.core.KoinComponent
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
