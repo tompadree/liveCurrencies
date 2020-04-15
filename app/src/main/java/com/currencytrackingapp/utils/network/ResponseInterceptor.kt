@@ -4,9 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class ResponseInterceptor(
-    private val internetConnectionManager: InternetConnectionManager,
-    private val notAuthorizedHandler: NotAuthorizedHandler
-) : Interceptor {
+    private val internetConnectionManager: InternetConnectionManager) : Interceptor {
 
 
     private val UNAUTHORIZED_EXCEPTION_CODE = 401
@@ -25,7 +23,7 @@ class ResponseInterceptor(
 
             if (responseCode > 399) {
                 if (responseCode == UNAUTHORIZED_EXCEPTION_CODE) {
-                    notAuthorizedHandler.logout()
+
                 }
 
                 throw NetworkException(response)

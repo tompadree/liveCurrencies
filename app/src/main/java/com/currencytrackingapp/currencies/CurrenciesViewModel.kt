@@ -1,25 +1,16 @@
 package com.currencytrackingapp.currencies
 
-import android.provider.Settings.Global.getString
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import androidx.databinding.Bindable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
-import androidx.lifecycle.Observer
-import com.currencytrackingapp.R
-import com.currencytrackingapp.data.api.NetworkApi
 import com.currencytrackingapp.data.models.RatesObject
 import com.currencytrackingapp.data.models.RatesListItem
-import com.currencytrackingapp.data.models.ResponseError
-import com.currencytrackingapp.data.models.ResponseSucces
 import com.currencytrackingapp.data.models.Result
 import com.currencytrackingapp.data.models.Result.Success
 import com.currencytrackingapp.data.source.CurrenciesRepository
-import com.currencytrackingapp.data.source.CurrenciesRepositoryImpl
-import com.currencytrackingapp.data.source.remote.CurrenciesRemoteDataSource
-import com.currencytrackingapp.utils.helpers.RequestExecutor
-import com.currencytrackingapp.utils.SingleLiveEvent
-import com.currencytrackingapp.utils.helpers.AppUtils
-import com.currencytrackingapp.utils.network.InternetConnectionException
-import com.currencytrackingapp.viewmodel.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
@@ -41,7 +32,7 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 //    val ratesListFetched: LiveData<LinkedList<RatesListItem>> get() = _ratesListFetched
 //
 //    val currentBase = ObservableField<String>("EUR")
-//    val currentValue = ObservableField<String>("100")
+    val currentValue = ObservableField<String>("100")
 //    val fetchingFlag = ObservableField<Boolean>(false)
 
 
@@ -65,7 +56,10 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
                 _dataLoading.value = false
             }
         }
-        repository.observeRates().switchMap { filterRates(it) }
+        // first fetched locally from last time than updated from backend
+        repository.observeRates().switchMap {
+            filterRates(it)
+        }
     }
 
     val items: LiveData<List<RatesListItem>> = _items
@@ -79,9 +73,9 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 //        _currentList.value = LinkedList()
 //        currentRates.observeForever(userObserver)
 //        fetchingFlag.set(true)
-        fetchRates(false)
-        fetchRates(true)
-
+//        fetchRates(false)
+//        fetchRates(true)
+        constantRefresh()
     }
 
 //    fun resume(){
@@ -114,6 +108,16 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
         _forceUpdate.value = true
     }
 
+    private fun constantRefresh() {
+
+        viewModelScope.launch {
+            while(true) {
+                delay(1000)
+                _forceUpdate.value = true
+            }
+        }
+    }
+
     private fun filterRates(ratesResult: Result<RatesObject>): LiveData<List<RatesListItem>> {
         // TODO: This is a good case for liveData builder. Replace when stable.
         val result = MutableLiveData<List<RatesListItem>>()
@@ -128,20 +132,44 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 //            showSnackbarMessage(R.string.loading_tasks_error)
             isDataLoadingError.value = true
         }
-
         return result
     }
 
     private fun filterItems(rates: HashMap<String, Double>): List<RatesListItem> {
         // We filter the tasks based on the requestType
         val returnList = LinkedList<RatesListItem>()
+        val currentValue = currentValue.get()?: "100"
 
-            returnList.addFirst(RatesListItem("EUR", 100.00))
-            for (item in rates) {
-                returnList.add(RatesListItem(item.key, roundOffDecimal(item.value * 100)))
+//            returnList.addFirst(RatesListItem("EUR", currentValue.toDouble()))
+//            for (item in rates) {
+////                returnList.add(RatesListItem(currentList[i].name, roundOffDecimal(currentValue.toDouble() * it.rates[currentList[i].name]!!)))
+//
+//                returnList.add(RatesListItem(item.key, roundOffDecimal(currentValue.toDouble() * rates[item.key]!!)))
+//            }
+
+
+        returnList.addFirst(RatesListItem("EUR", currentValue.toDouble()))
+        for (item in rates) {
+            try {
+                if(rates.containsKey(item.key) && item.key != "EUR")
+                    returnList.add(RatesListItem(item.key, roundOffDecimal(currentValue.toDouble() * rates[item.key]!!)))
+            } catch ( e: Exception) {
+                fail(e)
             }
+        }
 
-        return returnList
+
+        return firstTimeSorting("EUR",returnList)
+    }
+
+
+    interface EditTextListener {
+
+    }
+
+    fun onBaseChanged(value: String) {
+        currentValue.set(value)
+        _forceUpdate.value = true
     }
 
 //    private fun fetchRates() {

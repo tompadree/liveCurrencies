@@ -1,4 +1,4 @@
-package com.currencytrackingapp.fragments
+package com.currencytrackingapp.base
 //
 //import androidx.fragment.app.Fragment
 //import androidx.lifecycle.LiveData

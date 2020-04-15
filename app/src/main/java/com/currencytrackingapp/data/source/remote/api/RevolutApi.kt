@@ -1,7 +1,7 @@
-package com.currencytrackingapp.data.api
+package com.currencytrackingapp.data.source.remote.api
 
-import com.currencytrackingapp.data.api.APIConstants.Companion.CONTENT_TYPE_JSON
-import com.currencytrackingapp.data.api.APIConstants.Companion.LATEST_RATES
+import com.currencytrackingapp.data.source.remote.api.APIConstants.Companion.CONTENT_TYPE_JSON
+import com.currencytrackingapp.data.source.remote.api.APIConstants.Companion.LATEST_RATES
 import com.currencytrackingapp.data.models.RatesObject
 import kotlinx.coroutines.Deferred
 import retrofit2.Response

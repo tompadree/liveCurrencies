@@ -1,4 +1,4 @@
-package com.currencytrackingapp.fragments
+package com.currencytrackingapp.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

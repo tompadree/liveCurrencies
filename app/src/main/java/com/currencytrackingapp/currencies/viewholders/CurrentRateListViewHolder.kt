@@ -5,28 +5,46 @@ import android.content.Context
 import android.graphics.Rect
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
+import com.currencytrackingapp.currencies.CurrenciesViewModel
 import com.currencytrackingapp.data.models.RatesListItem
 import com.currencytrackingapp.utils.helpers.CountryHelper
 import com.currencytrackingapp.currencies.OnCurrencyListener
+import com.currencytrackingapp.currencies.RatesViewHolder
+import com.currencytrackingapp.databinding.RatesItemBinding
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_currencies.*
 
 
-class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerView.ViewHolder(view), LayoutContainer {
+class CurrentRateListViewHolder(val binding: RatesItemBinding, val activity: Activity) : RecyclerView.ViewHolder(binding.root), LayoutContainer {
 
-    override val containerView: View? = view
+    override val containerView = binding.root
+
+    companion object {
+        fun from(parent: ViewGroup, activity: Activity): CurrentRateListViewHolder {
+            val layoutInflater = LayoutInflater.from(parent.context)
+            val binding = RatesItemBinding.inflate(layoutInflater, parent, false)
+
+            return CurrentRateListViewHolder(binding, activity)
+        }
+    }
     private var focusCleared = true
     private var lastPosition = 0
     private var keyboardShown = false
 
-    fun bindView(position: Int, ratesListItem: RatesListItem, onCurrencyListener: OnCurrencyListener) {
+    fun bindView(position: Int, ratesListItem: RatesListItem, currenciesViewModel: CurrenciesViewModel) { //, onCurrencyListener: OnCurrencyListener) {
+
+        binding.viewModel = currenciesViewModel
+        binding.ratesItem = ratesListItem
+        binding.executePendingBindings()
 
         initKeyBoardListener(itemCurrenciesEtAmount)
         itemCurrenciesTvISO.text = ratesListItem.name
@@ -40,20 +58,20 @@ class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerVi
 
         itemCurrenciesLayout.setOnClickListener {
 
-            onCurrencyListener.onItemClicked(position, ratesListItem.name, itemCurrenciesEtAmount.text.toString())
+//            onCurrencyListener.onItemClicked(position, ratesListItem.name, itemCurrenciesEtAmount.text.toString())
             lastPosition = ratesListItem.currentRate.toString().length
 
         }
 
         if (position == 0) {
-            setEdiTextListeners(itemCurrenciesEtAmount, onCurrencyListener)
+            setEdiTextListeners(itemCurrenciesEtAmount, null)
         }else {
             itemCurrenciesEtAmount.isEnabled = false
         }
 
     }
 
-    private fun setEdiTextListeners(itemCurrenciesEtAmount: EditText, onCurrencyListener: OnCurrencyListener) {
+    private fun setEdiTextListeners(itemCurrenciesEtAmount: EditText, onCurrencyListener: OnCurrencyListener?) {
 
         itemCurrenciesEtAmount.isEnabled = true
 
@@ -93,8 +111,8 @@ class CurrentRateListViewHolder(view: View, val activity: Activity) : RecyclerVi
             }
 
             override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
-                if(beforeCount!= count)
-                    onCurrencyListener.onTypeListener(p0.toString())
+//                if(beforeCount!= count)
+//                    onCurrencyListener.onTypeListener(p0.toString())
             }
         })
 

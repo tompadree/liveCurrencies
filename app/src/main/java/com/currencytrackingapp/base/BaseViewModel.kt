@@ -1,6 +1,5 @@
-package com.currencytrackingapp.viewmodel
+package com.currencytrackingapp.base
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -18,7 +18,7 @@
             tools:replace="android:appComponentFactory">
 <!--        <activity android:name=".activities.NavigationActivity"></activity>-->
         <activity
-                android:name=".activities.NavigationActivity"
+                android:name=".base.NavigationActivity"
                 android:noHistory="true"
                 android:screenOrientation="portrait"
                 android:theme="@style/NoActionBar">

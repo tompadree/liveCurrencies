@@ -1,5 +1,6 @@
 package com.currencytrackingapp.data.source.local
 
+import androidx.annotation.Nullable
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
@@ -20,7 +21,14 @@ interface CurrenciesDao {
      * @return all rates.
      */
     @Query("SELECT * FROM ratesObject")
+    @Nullable
     fun observeRates(): LiveData<RatesObject>
+
+    /**
+     * Delete all tasks.
+     */
+    @Query("DELETE FROM ratesObject")
+    suspend fun deleteRates()
 
 //    @Query("SELECT rates FROM ratesObject")
 //    fun observeRates(): LiveData<HashMap<String, Double>>
@@ -30,7 +38,7 @@ interface CurrenciesDao {
      *
      * @return all rates.
      */
-    @Query("SELECT * FROM ratesObject ") //WHERE meterId=:meterId AND year=:year AND billGroupId=:billGroupId")
+    @Query("SELECT * FROM ratesObject ")
     suspend fun getCurrencies(): RatesObject
 
 

@@ -1,4 +1,4 @@
-package com.currencytrackingapp.dialogs
+package com.currencytrackingapp.utils.helpers.dialogs
 
 
 import android.app.Dialog

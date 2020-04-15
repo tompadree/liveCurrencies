@@ -1,4 +1,4 @@
-package com.currencytrackingapp.data.api
+package com.currencytrackingapp.data.source.remote.api
 
 interface APIConstants {
     companion object {

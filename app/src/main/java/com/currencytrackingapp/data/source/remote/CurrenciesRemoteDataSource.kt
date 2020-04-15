@@ -2,19 +2,11 @@ package com.currencytrackingapp.data.source.remote
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import com.currencytrackingapp.data.api.NetworkApi
-import com.currencytrackingapp.data.api.RevolutApi
+import com.currencytrackingapp.data.source.remote.api.RevolutApi
 import com.currencytrackingapp.data.models.RatesObject
-import com.currencytrackingapp.data.models.ResponseError
-import com.currencytrackingapp.data.models.ResponseSucces
 import com.currencytrackingapp.data.models.Result
 import com.currencytrackingapp.data.source.CurrenciesDataStore
-import com.currencytrackingapp.utils.helpers.RequestExecutor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * @author Tomislav Curis

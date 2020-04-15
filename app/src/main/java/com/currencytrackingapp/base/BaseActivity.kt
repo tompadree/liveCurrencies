@@ -1,4 +1,4 @@
-package com.currencytrackingapp.activities
+package com.currencytrackingapp.base
 
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
@@ -12,8 +12,8 @@ import com.currencytrackingapp.utils.network.InternetConnectionException
 import com.currencytrackingapp.utils.network.InternetConnectionManager
 import com.currencytrackingapp.utils.network.NetworkException
 import com.currencytrackingapp.utils.helpers.observe
-import com.currencytrackingapp.dialogs.DialogManager
-import com.currencytrackingapp.dialogs.LoadingDialog
+import com.currencytrackingapp.utils.helpers.dialogs.DialogManager
+import com.currencytrackingapp.utils.helpers.dialogs.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

@@ -18,7 +18,7 @@ class CurrenciesLocalDataSource(private val currenciesDao: CurrenciesDao) : Curr
 
     override fun observeRates(): LiveData<Result<RatesObject>> {
         return currenciesDao.observeRates().map {
-            Success(it)
+            it?.let { Success(it) }
         }
     }
 
@@ -29,12 +29,12 @@ class CurrenciesLocalDataSource(private val currenciesDao: CurrenciesDao) : Curr
             } catch (e: Exception) {
                 Error(e)
             }
-
         }
 
     override suspend fun refreshRates() {}
 
     override suspend fun saveTasks(rates: RatesObject) {
+        currenciesDao.deleteRates()
         currenciesDao.insertRates(rates)
     }
 }

@@ -1,18 +1,14 @@
 package com.currencytrackingapp.currencies
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.SimpleItemAnimator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.currencytrackingapp.R
 import com.currencytrackingapp.databinding.FragmentCurrenciesBinding
-import com.currencytrackingapp.fragments.BindingFragment
-import kotlinx.android.synthetic.main.activity_currencies_main.*
+import com.currencytrackingapp.base.BindingFragment
+import com.currencytrackingapp.base.NavigationActivity
+import kotlinx.android.synthetic.main.fragment_currencies.*
 import timber.log.Timber
 
 class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
@@ -59,9 +55,10 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
 
     fun setupRv() {
         if (viewModel != null) {
-            currentRatesAdapter = RatesListAdapter(viewModel)
+            currentRatesAdapter = RatesListAdapter(viewModel, activity as NavigationActivity)
             with(currenciesRv) {
                 adapter = currentRatesAdapter
+                (currenciesRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             }
 
         } else {
@@ -70,7 +67,6 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
 
 
     }
-
 
 //    private fun setView() {
 //

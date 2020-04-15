@@ -1,10 +1,7 @@
-package com.currencytrackingapp.activities
+package com.currencytrackingapp.base
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
+import androidx.appcompat.app.AppCompatActivity
 import com.currencytrackingapp.R
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -12,12 +9,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
 
 
-class NavigationActivity : BaseActivity() {
+class NavigationActivity : AppCompatActivity() { //BaseActivity() {
 
     private val onDestinationChangedListener = this@NavigationActivity::onDestinationChanged
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -42,17 +36,17 @@ class NavigationActivity : BaseActivity() {
                 super.onSupportNavigateUp()
     }
 
-//    override fun onPause() {
-//        val navHostFragment = (supportFragmentManager.primaryNavigationFragment as NavHostFragment?)!!
-//        navHostFragment.navController.removeOnDestinationChangedListener(onDestinationChangedListener)
-//        super.onPause()
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        val navHostFragment = (supportFragmentManager.primaryNavigationFragment as NavHostFragment?)!!
-//        navHostFragment.navController.addOnDestinationChangedListener(onDestinationChangedListener)
-//    }
+    override fun onPause() {
+        val navHostFragment = (supportFragmentManager.primaryNavigationFragment as NavHostFragment?)!!
+        navHostFragment.navController.removeOnDestinationChangedListener(onDestinationChangedListener)
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val navHostFragment = (supportFragmentManager.primaryNavigationFragment as NavHostFragment?)!!
+        navHostFragment.navController.addOnDestinationChangedListener(onDestinationChangedListener)
+    }
 
     private fun onDestinationChanged(
         controller: NavController,

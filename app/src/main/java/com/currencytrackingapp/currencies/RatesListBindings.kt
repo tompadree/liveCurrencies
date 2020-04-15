@@ -1,10 +1,14 @@
 package com.currencytrackingapp.currencies
 
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.currencytrackingapp.data.models.RatesListItem
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import android.widget.TextView
+import androidx.databinding.InverseMethod
 import com.currencytrackingapp.utils.helpers.CountryHelper
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -30,4 +34,39 @@ fun setIcon(imageView: CircleImageView, name: String) {
 
     imageView.setImageResource(CountryHelper.getFlagForISO(name))
     imageView.clearFocus()
+}
+
+@BindingAdapter("app:onBaseChanged")
+fun onBaseChanged(itemCurrenciesEtAmount: EditText, string: EditTextListener) {
+
+//    itemCurrenciesEtAmount.setOnClickListener { itemCurrenciesEtAmount.isEnabled = true }
+
+//    if(itemCurrenciesEtAmount.text.toString() != "12321")
+//        return
+
+    itemCurrenciesEtAmount.addTextChangedListener(object : TextWatcher {
+
+        var beforeCount = 0
+
+        override fun afterTextChanged(p0: Editable) {
+//            if (beforeCount != p0.length)
+//                lastPosition = itemCurrenciesEtAmount.selectionStart
+
+            itemCurrenciesEtAmount.requestFocus()
+        }
+
+        override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {
+            beforeCount = p0.length
+        }
+
+        override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
+                if(beforeCount!= count && itemCurrenciesEtAmount.isEnabled)
+                    string.onTextChanged(p0.toString())
+//                    onCurrencyListener.onTypeListener(p0.toString())
+        }
+    })
+}
+
+interface EditTextListener {
+    fun onTextChanged(string: String)
 }

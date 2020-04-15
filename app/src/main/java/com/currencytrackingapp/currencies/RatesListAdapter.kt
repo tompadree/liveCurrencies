@@ -1,77 +1,127 @@
 package com.currencytrackingapp.currencies
 
-import android.provider.Settings.Global.getString
+import android.app.Activity
+import android.content.Context
+import android.graphics.Rect
+import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.currencytrackingapp.R
 import com.currencytrackingapp.data.models.RatesListItem
 import com.currencytrackingapp.databinding.RatesItemBinding
-import com.currencytrackingapp.currencies.RatesListAdapter.RatesViewHolder
-import com.currencytrackingapp.utils.helpers.CountryHelper
-import timber.log.Timber
+import com.currencytrackingapp.currencies.diffUtil.RatesDiffUtil
+import com.currencytrackingapp.currencies.viewholders.CurrentRateListViewHolder
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.rates_item.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethod
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import kotlinx.android.synthetic.main.item_currencies.*
+import kotlinx.android.synthetic.main.rates_item.itemCurrenciesEtAmount
+
 
 /**
  * @author Tomislav Curis
  */
-class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel)
-    : ListAdapter<RatesListItem, RatesViewHolder>(RatesDiffUtil()) {
+class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, private val activity: Activity)
+    : ListAdapter<RatesListItem, RatesViewHolder>(RatesDiffUtil()) { //CurrentRateListViewHolde>(RatesDiffUtil()) {
+
+//    init {
+//        setHasStableIds(true)
+//    }
+//
+    override fun getItemId(position: Int): Long = getItem(position).name.hashCode().toLong()
+    override fun getItemViewType(position: Int) = position
 
     override fun onBindViewHolder(holder: RatesViewHolder, position: Int) {
-        holder.bind(currenciesViewModel, getItem(position))
+        holder.bind(currenciesViewModel, getItem(position), position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RatesViewHolder {
         return RatesViewHolder.from(parent)
     }
 
-    class RatesViewHolder private constructor(val binding: RatesItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    // close keyboard if first item is not visible
+    override fun onViewDetachedFromWindow(holder: RatesViewHolder) {
+        super.onViewDetachedFromWindow(holder)
 
-        fun bind(viewModel: CurrenciesViewModel, item: RatesListItem) {
-
-            binding.viewModel = viewModel
-            binding.ratesItem = item
-            binding.executePendingBindings()
-        }
-
-        companion object {
-            fun from(parent: ViewGroup): RatesViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = RatesItemBinding.inflate(layoutInflater, parent, false)
-
-                return RatesViewHolder(binding)
-            }
-        }
+        holder.binding.itemCurrenciesEtAmount.clearFocus()
     }
+
+//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentRateListViewHolder {
+//        return CurrentRateListViewHolder.from(parent, activity)
+//    }
+//
+//    override fun onBindViewHolder(holder: CurrentRateListViewHolder, position: Int) {
+//        holder.bindView(position, getItem(position), currenciesViewModel)
+//    }
+
+
 
 }
 
-/**
- * Callback for calculating the diff between two non-null items in a list.
- *
- * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
- * list that's been passed to `submitList`.
- */
-//class RatesDiffCallback : DiffUtil.ItemCallback<Task>() {
-//    override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
-//        return oldItem.id == newItem.id
-//    }
-//
-//    override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
-//        return oldItem == newItem
-//    }
-//}
+class RatesViewHolder private constructor(val binding: RatesItemBinding) : RecyclerView.ViewHolder(binding.root), LayoutContainer {
 
-class RatesDiffUtil : DiffUtil.ItemCallback<RatesListItem>() {
+    override val containerView = binding.root
 
-    override fun areItemsTheSame(oldItem: RatesListItem, newItem: RatesListItem): Boolean {
-        return oldItem.name == newItem.name
+    companion object {
+        fun from(parent: ViewGroup): RatesViewHolder {
+            val layoutInflater = LayoutInflater.from(parent.context)
+            val binding = RatesItemBinding.inflate(layoutInflater, parent, false)
+
+            return RatesViewHolder(binding)
+        }
     }
 
-    override fun areContentsTheSame(oldItem: RatesListItem, newItem: RatesListItem): Boolean {
-        return oldItem.currentRate == newItem.currentRate
+
+    fun bind(viewModel: CurrenciesViewModel, item: RatesListItem, position: Int) {
+
+        binding.viewModel = viewModel
+        binding.ratesItem = item
+        binding.executePendingBindings()
+
+
+        if(position == 0) {
+            itemCurrenciesEtAmount.isEnabled = true
+            itemCurrenciesEtAmount.clearFocus()
+            itemCurrenciesEtAmount.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    //Clear focus here from edittext
+                    itemCurrenciesEtAmount.clearFocus()
+                }
+                false
+            }
+        }else
+            itemCurrenciesEtAmount.isEnabled = false
+    }
+}
+
+class MyEditText(context: Context, attrs: AttributeSet) : EditText(context, attrs) {
+
+    override fun onKeyPreIme(keyCode: Int, event: KeyEvent): Boolean {
+
+        clearFocus()
+        // Event is handled therefore return true
+        return true
+    }
+
+    // close keyboard if first item is not visible
+    override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
+        super.onFocusChanged(focused, direction, previouslyFocusedRect)
+
+        if(!focused) {
+            // Close keyboard
+            (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                .hideSoftInputFromWindow(this.windowToken ?: return, 0)
+
+        }
     }
 }

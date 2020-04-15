@@ -2,13 +2,11 @@ package com.currencytrackingapp.data.models
 
 import androidx.room.*
 import com.google.gson.Gson
-import com.google.gson.JsonElement
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "ratesObject")
- class RatesObject (
+class RatesObject (
 
     @PrimaryKey(autoGenerate = true)
     var id : Int = 1,

@@ -3,10 +3,8 @@ package com.currencytrackingapp.di
 import androidx.room.Room
 import com.currencytrackingapp.BuildConfig
 import com.currencytrackingapp.currencies.CurrenciesViewModel
-import com.currencytrackingapp.data.api.APIConstants
-import com.currencytrackingapp.data.api.NetworkApi
-import com.currencytrackingapp.data.api.RevolutApi
-import com.currencytrackingapp.data.api.impl.NetworkApiImpl
+import com.currencytrackingapp.data.source.remote.api.APIConstants
+import com.currencytrackingapp.data.source.remote.api.RevolutApi
 import com.currencytrackingapp.data.source.CurrenciesRepository
 import com.currencytrackingapp.data.source.CurrenciesRepositoryImpl
 import com.currencytrackingapp.data.source.local.CurrenciesDatabase
@@ -23,7 +21,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.module.Module
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -58,13 +55,13 @@ val DataModule = module {
 
 val NetModule = module {
 
-    factory { NotAuthorizedHandlerImpl(get()) as NotAuthorizedHandler }
+    factory { InternetConnectionManagerImpl(get()) as InternetConnectionManager }
 
     single {
 
         OkHttpClient.Builder()
             .connectTimeout(40, TimeUnit.SECONDS)
-            .addInterceptor(ResponseInterceptor(get(), get())).apply {
+            .addInterceptor(ResponseInterceptor(get())).apply {
                 if (BuildConfig.DEBUG) {
                     var loggingInterceptor = HttpLoggingInterceptor()
                     loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -86,8 +83,4 @@ val NetModule = module {
             .build()
             .create(RevolutApi::class.java)) as RevolutApi
     }
-
-    single { NetworkApiImpl(get()) as NetworkApi }
-    factory { InternetConnectionManagerImpl(get()) as InternetConnectionManager }
-
 }
