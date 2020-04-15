@@ -32,7 +32,13 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 //    val ratesListFetched: LiveData<LinkedList<RatesListItem>> get() = _ratesListFetched
 //
 //    val currentBase = ObservableField<String>("EUR")
-    val currentValue = ObservableField<String>("100")
+    val _currentValue = ObservableField<String>("100")
+//    set(value) = ""
+//    var currentValue: String
+//        get() = _currentValue.get()!!
+//        set(value) = _currentValue.set("100")
+
+
 //    val fetchingFlag = ObservableField<Boolean>(false)
 
 
@@ -137,18 +143,10 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 
     private fun filterItems(rates: HashMap<String, Double>): List<RatesListItem> {
         // We filter the tasks based on the requestType
-        val returnList = LinkedList<RatesListItem>()
-        val currentValue = currentValue.get()?: "100"
-
-//            returnList.addFirst(RatesListItem("EUR", currentValue.toDouble()))
-//            for (item in rates) {
-////                returnList.add(RatesListItem(currentList[i].name, roundOffDecimal(currentValue.toDouble() * it.rates[currentList[i].name]!!)))
-//
-//                returnList.add(RatesListItem(item.key, roundOffDecimal(currentValue.toDouble() * rates[item.key]!!)))
-//            }
+        val currentValue = _currentValue.get()?: "100"
+        val returnList =  LinkedList<RatesListItem>()
 
 
-        returnList.addFirst(RatesListItem("EUR", currentValue.toDouble()))
         for (item in rates) {
             try {
                 if(rates.containsKey(item.key) && item.key != "EUR")
@@ -158,8 +156,8 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
             }
         }
 
-
-        return firstTimeSorting("EUR",returnList)
+        return sorting(currentValue.toDouble(), "EUR", returnList)
+//        return if(currentValue == "100") firstTimeSorting("EUR",returnList) else returnList
     }
 
 
@@ -168,7 +166,8 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
     }
 
     fun onBaseChanged(value: String) {
-        currentValue.set(value)
+        _currentValue.set(value)
+//        items.value?.get(0)?.let{ it.currentRate = value.toDouble()}
         _forceUpdate.value = true
     }
 
@@ -239,6 +238,13 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
         val sorted = LinkedList<RatesListItem>(returnList.sortedWith(compareBy { it.name }))
         sorted.remove(RatesListItem(base, 100.00))
         sorted.addFirst(RatesListItem(base, 100.00))
+        return sorted
+    }
+
+    private fun sorting(firstValue : Double, base: String, returnList: LinkedList<RatesListItem>): LinkedList<RatesListItem> {
+        val sorted = LinkedList<RatesListItem>(returnList.sortedWith(compareBy { it.name }))
+        sorted.remove(RatesListItem(base, firstValue))
+        sorted.addFirst(RatesListItem(base, firstValue))
         return sorted
     }
 

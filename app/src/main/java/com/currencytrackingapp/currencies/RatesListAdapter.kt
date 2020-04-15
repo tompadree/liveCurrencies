@@ -52,7 +52,6 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
     // close keyboard if first item is not visible
     override fun onViewDetachedFromWindow(holder: RatesViewHolder) {
         super.onViewDetachedFromWindow(holder)
-
         holder.binding.itemCurrenciesEtAmount.clearFocus()
     }
 
@@ -89,9 +88,9 @@ class RatesViewHolder private constructor(val binding: RatesItemBinding) : Recyc
         binding.executePendingBindings()
 
 
-        if(position == 0) {
+        if(position == 0) { // && !itemCurrenciesEtAmount.isEnabled) {
             itemCurrenciesEtAmount.isEnabled = true
-            itemCurrenciesEtAmount.clearFocus()
+//            itemCurrenciesEtAmount.clearFocus()
             itemCurrenciesEtAmount.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     //Clear focus here from edittext
