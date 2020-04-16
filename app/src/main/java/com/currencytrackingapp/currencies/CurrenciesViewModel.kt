@@ -42,10 +42,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 //    val fetchingFlag = ObservableField<Boolean>(false)
 
 
-
-
-
-
     // Not used at the moment
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
@@ -265,7 +261,4 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 //        setLoading(show)
 
     }
-
-
-
 }

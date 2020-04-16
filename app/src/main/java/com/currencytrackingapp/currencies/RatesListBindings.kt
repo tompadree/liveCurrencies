@@ -6,12 +6,9 @@ import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.currencytrackingapp.data.models.RatesListItem
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import android.widget.TextView
-import androidx.databinding.InverseMethod
 import com.currencytrackingapp.utils.helpers.CountryHelper
 import de.hdodenhof.circleimageview.CircleImageView
-import java.util.*
 
 
 /**
