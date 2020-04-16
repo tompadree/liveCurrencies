@@ -31,7 +31,7 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 //    private val _ratesListFetched = MutableLiveData<LinkedList<RatesListItem>>()
 //    val ratesListFetched: LiveData<LinkedList<RatesListItem>> get() = _ratesListFetched
 //
-//    val currentBase = ObservableField<String>("EUR")
+    val _currentBase = ObservableField<String>("EUR")
     val _currentValue = ObservableField<String>("100")
 //    set(value) = ""
 //    var currentValue: String
@@ -58,7 +58,7 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
         if (forceUpdate) {
             _dataLoading.value = true
             viewModelScope.launch {
-                repository.refreshRates()
+                repository.refreshRates(_currentBase.get()!!)
                 _dataLoading.value = false
             }
         }
@@ -115,9 +115,8 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
     }
 
     private fun constantRefresh() {
-
         viewModelScope.launch {
-            while(true) {
+            while (true) {
                 delay(1000)
                 _forceUpdate.value = true
             }
@@ -149,25 +148,25 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 
         for (item in rates) {
             try {
-                if(rates.containsKey(item.key) && item.key != "EUR")
+                if(rates.containsKey(item.key) && item.key != _currentBase.get())
                     returnList.add(RatesListItem(item.key, roundOffDecimal(currentValue.toDouble() * rates[item.key]!!)))
             } catch ( e: Exception) {
                 fail(e)
             }
         }
 
-        return sorting(currentValue.toDouble(), "EUR", returnList)
-//        return if(currentValue == "100") firstTimeSorting("EUR",returnList) else returnList
+        return sorting(currentValue.toDouble(), _currentBase.get()!!, returnList)
     }
 
 
-    interface EditTextListener {
-
+    fun onItemClicked(ratesItem: RatesListItem){
+        _currentBase.set(ratesItem.name)
+        _currentValue.set(ratesItem.currentRate.toString())
+        _forceUpdate.value = true
     }
 
     fun onBaseChanged(value: String) {
         _currentValue.set(value)
-//        items.value?.get(0)?.let{ it.currentRate = value.toDouble()}
         _forceUpdate.value = true
     }
 

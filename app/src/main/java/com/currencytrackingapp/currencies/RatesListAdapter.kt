@@ -46,6 +46,8 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RatesViewHolder {
+
+
         return RatesViewHolder.from(parent)
     }
 
@@ -54,6 +56,8 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
         super.onViewDetachedFromWindow(holder)
         holder.binding.itemCurrenciesEtAmount.clearFocus()
     }
+
+
 
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentRateListViewHolder {
 //        return CurrentRateListViewHolder.from(parent, activity)
@@ -86,6 +90,9 @@ class RatesViewHolder private constructor(val binding: RatesItemBinding) : Recyc
         binding.viewModel = viewModel
         binding.ratesItem = item
         binding.executePendingBindings()
+
+
+
 
 
         if(position == 0) { // && !itemCurrenciesEtAmount.isEnabled) {

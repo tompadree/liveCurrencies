@@ -32,8 +32,8 @@ class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi) : Currencie
         )
     }
 
-    override suspend fun refreshRates() {
-        observableRates.value = getLatestRates("EUR")
+    override suspend fun refreshRates(base: String) {
+        observableRates.value = getLatestRates(base)
     }
 
     override suspend fun saveTasks(rates: RatesObject) {}

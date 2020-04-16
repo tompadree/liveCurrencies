@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.databinding.InverseMethod
 import com.currencytrackingapp.utils.helpers.CountryHelper
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.*
 
 
 /**
@@ -21,6 +22,14 @@ import de.hdodenhof.circleimageview.CircleImageView
 fun setItems(listView: RecyclerView, items: List<RatesListItem>?) {
     items?.let { (listView.adapter as RatesListAdapter).submitList(items) }
 }
+
+//@BindingAdapter("app:items")
+//fun setItems(listView: RecyclerView, items: List<RatesListItem>?, positionToSwap: Int) {
+//    items?.let {
+//        Collections.swap(items, positionToSwap, 0)
+//        (listView.adapter as RatesListAdapter).submitList(items)
+//    }
+//}
 
 @BindingAdapter("subTitleName")
 fun setFormattedText(textView: TextView, name: String) {

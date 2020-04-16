@@ -22,7 +22,8 @@
             android:id="@+id/itemCurrenciesLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true">
+            android:focusable="true"
+            android:onClick="@{() -> viewModel.onItemClicked(ratesItem)}">
 <!--        android:focusableInTouchMode="true"-->
 
 

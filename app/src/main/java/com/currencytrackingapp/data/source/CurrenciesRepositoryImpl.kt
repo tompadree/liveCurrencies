@@ -27,7 +27,7 @@ class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: Currencies
         wrapEspressoIdlingResource {
             if (forceUpdate) {
                 try {
-                    updateRatesFromRemoteDataSource()
+                    updateRatesFromRemoteDataSource(base)
                 } catch (ex: Exception) {
                     return Error(ex)
                 }
@@ -36,9 +36,9 @@ class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: Currencies
         }
     }
 
-    override suspend fun refreshRates() {
+    override suspend fun refreshRates(base: String) {
         wrapEspressoIdlingResource {
-            updateRatesFromRemoteDataSource()
+            updateRatesFromRemoteDataSource(base)
         }
     }
 
@@ -46,8 +46,8 @@ class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: Currencies
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    private suspend fun updateRatesFromRemoteDataSource(){
-        val remoteRates = currenciesRemoteDataSource.getLatestRates("EUR")
+    private suspend fun updateRatesFromRemoteDataSource(base: String){
+        val remoteRates = currenciesRemoteDataSource.getLatestRates(base)
 
         if (remoteRates is Success) {
             // Real apps might want to do a proper sync, deleting, modifying or adding each task.

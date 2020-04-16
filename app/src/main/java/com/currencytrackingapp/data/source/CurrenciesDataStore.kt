@@ -13,7 +13,7 @@ interface CurrenciesDataStore {
 
     suspend fun getLatestRates(base: String): Result<RatesObject>
 
-    suspend fun refreshRates()
+    suspend fun refreshRates(base: String)
 
     suspend fun saveTasks(rates: RatesObject)
 }

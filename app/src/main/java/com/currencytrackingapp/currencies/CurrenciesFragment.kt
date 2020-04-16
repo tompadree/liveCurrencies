@@ -2,6 +2,9 @@ package com.currencytrackingapp.currencies
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.*
 import androidx.recyclerview.widget.SimpleItemAnimator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.currencytrackingapp.R
@@ -56,11 +59,20 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
     fun setupRv() {
         if (viewModel != null) {
             currentRatesAdapter = RatesListAdapter(viewModel, activity as NavigationActivity)
+
             with(currenciesRv) {
+                layoutManager = LinearLayoutManager(context)
                 adapter = currentRatesAdapter
                 (currenciesRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-            }
 
+                // Scroll to first item after change
+                currentRatesAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
+                    override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                        super.onItemRangeMoved(fromPosition, toPosition, itemCount)
+                        (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
+                    }
+                })
+            }
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
