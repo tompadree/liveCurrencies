@@ -2,6 +2,7 @@ package com.currencytrackingapp.currencies
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
@@ -11,8 +12,13 @@ import com.currencytrackingapp.R
 import com.currencytrackingapp.databinding.FragmentCurrenciesBinding
 import com.currencytrackingapp.base.BindingFragment
 import com.currencytrackingapp.base.NavigationActivity
+import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.android.synthetic.main.fragment_currencies.*
 import timber.log.Timber
+import com.currencytrackingapp.utils.helpers.observe
+import com.currencytrackingapp.utils.network.ConnectivityChecker
+import com.currencytrackingapp.utils.network.InternetConnectionManager
+import org.koin.android.ext.android.inject
 
 class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
 
@@ -21,7 +27,11 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
 
     private val viewModel: CurrenciesViewModel by viewModel()
 
+    private val connectivityChecker: ConnectivityChecker by inject()
+    private val internetConnectionManager: InternetConnectionManager by inject()
+
     private lateinit var currentRatesAdapter: RatesListAdapter
+
 //    private lateinit var viewDataBinding: CurrenciesFrag
 //    {
 //        //        TasksViewModelFactory(DefaultTasksRepository.getRepository(requireActivity().application))
@@ -45,18 +55,45 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel = ViewModelProviders.of(this).get(LoginEnvViewModel::class.java)
 
         binding.viewModel = viewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
 
+
+        shimmerViewContainer.startShimmer()
+        setupObservers()
         setupRv()
 
-
-//        FragmentCurrenciesBinding.bind(view)
     }
 
-    fun setupRv() {
+    // Better solution than flag binded in layout
+    var emptyCheck = true
+    private fun setupObservers(){
+        viewModel.empty.observe(this) {
+
+            if(it == true) {
+                emptyCheck = true
+                shimmerViewContainer.startShimmer()
+            } else if(it == false && emptyCheck) {
+                shimmerViewContainer.stopShimmer()
+                shimmerViewContainer.visibility = View.GONE
+                emptyCheck = false
+            }
+        }
+
+
+
+//        connectivityChecker.apply {
+//                binding.lifecycleOwner?.let {
+//                    lifecycle.addObserver(this)
+//                    connectedStatus.observe(it, Observer { connected ->
+//                        viewModel._forceUpdate.value = connected
+//                    })
+//                }
+//        }
+    }
+
+    private fun setupRv() {
         if (viewModel != null) {
             currentRatesAdapter = RatesListAdapter(viewModel, activity as NavigationActivity)
 
@@ -76,9 +113,13 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
-
-
     }
+
+//    private fun showSnackbar() {
+//        internetConnectionManager.isInternetAvailable(activity.parent)
+//
+//
+//    }
 
 //    private fun setView() {
 //

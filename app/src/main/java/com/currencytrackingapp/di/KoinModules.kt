@@ -1,5 +1,6 @@
 package com.currencytrackingapp.di
 
+import android.net.ConnectivityManager
 import androidx.room.Room
 import com.currencytrackingapp.BuildConfig
 import com.currencytrackingapp.currencies.CurrenciesViewModel
@@ -49,7 +50,7 @@ val DataModule = module {
 
     single { CurrenciesRepositoryImpl(get(), get()) as CurrenciesRepository }
 
-    viewModel { CurrenciesViewModel(get()) }
+    viewModel { CurrenciesViewModel(get(), get()) }
 }
 
 
@@ -57,10 +58,13 @@ val NetModule = module {
 
     factory { InternetConnectionManagerImpl(get()) as InternetConnectionManager }
 
+    single { ConnectivityChecker(get())}
+
     single {
 
         OkHttpClient.Builder()
             .connectTimeout(40, TimeUnit.SECONDS)
+            .addInterceptor(NetworkExceptionInterceptor())
             .addInterceptor(ResponseInterceptor(get())).apply {
                 if (BuildConfig.DEBUG) {
                     var loggingInterceptor = HttpLoggingInterceptor()

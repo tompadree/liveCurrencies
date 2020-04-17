@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import okhttp3.Response
 import java.io.IOException
 
-class NetworkException(response: okhttp3.Response?) : IOException() {
+class NetworkException(response: Response?) : IOException() {
 
     private val localResponse: okhttp3.Response? = response
     private var errors: NetworkErrors? = localResponse?.let { handleResponse(localResponse) }

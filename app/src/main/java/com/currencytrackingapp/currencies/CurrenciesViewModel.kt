@@ -1,9 +1,5 @@
 package com.currencytrackingapp.currencies
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
-import androidx.databinding.Bindable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.currencytrackingapp.data.models.RatesObject
@@ -11,47 +7,35 @@ import com.currencytrackingapp.data.models.RatesListItem
 import com.currencytrackingapp.data.models.Result
 import com.currencytrackingapp.data.models.Result.Success
 import com.currencytrackingapp.data.source.CurrenciesRepository
+import com.currencytrackingapp.utils.network.InternetConnectionManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewModel() { //} BaseViewModel() { //, KoinComponent {
+class CurrenciesViewModel(private val repository: CurrenciesRepository, private val internetConnectionManager: InternetConnectionManager) : ViewModel() { //} BaseViewModel() { //, KoinComponent {
 
-//    private val networkApi: NetworkApi by inject()
-//    private val appUtils: AppUtils by inject()
-//private val repository: CurrenciesRepository? = null //CurrenciesRepositoryImpl(null, null)
-//    private val currentRates = MutableLiveData<RatesObject>()
-//    private val currentRatesUpdatedEvent = SingleLiveEvent<Unit>()
-//
-//    val _currentList = MutableLiveData<LinkedList<RatesListItem>>()
-//
-//    private val _ratesListFetched = MutableLiveData<LinkedList<RatesListItem>>()
-//    val ratesListFetched: LiveData<LinkedList<RatesListItem>> get() = _ratesListFetched
-//
+
     val _currentBase = ObservableField<String>("EUR")
     val _currentValue = ObservableField<String>("100")
-//    set(value) = ""
-//    var currentValue: String
-//        get() = _currentValue.get()!!
-//        set(value) = _currentValue.set("100")
-
-
-//    val fetchingFlag = ObservableField<Boolean>(false)
-
 
     // Not used at the moment
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
+    // Not used at the moment
+    val _isInternetConnected = MutableLiveData<Boolean>(true)
+
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
-    private val _forceUpdate = MutableLiveData<Boolean>(false)
+    val _forceUpdate = MutableLiveData<Boolean>(false)
 
+    // https://stackoverflow.com/questions/47575961/what-is-the-difference-between-map-and-switchmap-methods
     private val _items: LiveData<List<RatesListItem>> = _forceUpdate.switchMap { forceUpdate ->
-        if (forceUpdate) {
+        if (forceUpdate && internetConnectionManager.hasInternetConnection()) {
             _dataLoading.value = true
             viewModelScope.launch {
                 repository.refreshRates(_currentBase.get()!!)
@@ -66,33 +50,17 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 
     val items: LiveData<List<RatesListItem>> = _items
 
-//    private val userObserver = Observer<RatesObject> {
-//        currentRatesUpdatedEvent.postCall()
-//    }
-
-    init {
-//        showLoading(true)
-//        _currentList.value = LinkedList()
-//        currentRates.observeForever(userObserver)
-//        fetchingFlag.set(true)
-//        fetchRates(false)
-//        fetchRates(true)
-        constantRefresh()
+    // This LiveData depends on another so we can use a transformation.
+    val empty: LiveData<Boolean> = Transformations.map(_items) {
+        it.isEmpty()
     }
 
-//    fun resume(){
-//        fetchingFlag.set(true)
-//    }
-//
-//    fun pause(){
-//        fetchingFlag.set(false)
-//    }
-//
-//    fun destroy() {
-//        fetchingFlag.set(false)
-//        onCleared()
-//    }
+    var hasInternet = MutableLiveData<Boolean>(false)
 
+
+    init {
+        constantRefresh()
+    }
 
     override fun onCleared() {
         try {
@@ -107,13 +75,14 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
     }
 
     private fun refresh() {
-        _forceUpdate.value = true
+        _forceUpdate.value = internetConnectionManager.hasInternetConnection()
     }
 
     private fun constantRefresh() {
         viewModelScope.launch {
             while (true) {
                 delay(1000)
+//                refresh()
                 _forceUpdate.value = true
             }
         }
@@ -138,7 +107,7 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
 
     private fun filterItems(rates: HashMap<String, Double>): List<RatesListItem> {
         // We filter the tasks based on the requestType
-        val currentValue = _currentValue.get()?: "100"
+        val currentValue = if(_currentValue.get()!!.isNotEmpty()) _currentValue.get()?: "100" else "0.0"
         val returnList =  LinkedList<RatesListItem>()
 
 
@@ -152,6 +121,7 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
         }
 
         return sorting(currentValue.toDouble(), _currentBase.get()!!, returnList)
+
     }
 
 
@@ -165,69 +135,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository) : ViewMo
         _currentValue.set(value)
         _forceUpdate.value = true
     }
-
-//    private fun fetchRates() {
-//
-//        viewModelScope.launch {
-//
-//
-//
-//
-//            while (fetchingFlag.get() == true) {
-//                delay(1_000)
-//                val currentList = _currentList.value?: LinkedList()
-//                val currentBase = currentBase.get()?: "EUR"
-//                val currentValue = currentValue.get()?: "100"
-//
-//                when (val response = RequestExecutor.execute(networkApi.getLatestRates(currentBase))) { /*TODO BASE*/
-//                    is ResponseSucces -> {
-//
-//                        response.data.body()?.let {
-//
-//                            val returnList = LinkedList<RatesListItem>()
-//                            val isInit = currentList.isEmpty()
-//
-//                            if (!isInit) {
-//                                returnList.addFirst(RatesListItem(currentBase, currentValue.toDouble()))
-//                                for (i in 1 until currentList.size) {
-//                                    try {
-//                                        if(it.rates.containsKey(currentList[i].name))
-//                                        returnList.add(RatesListItem(currentList[i].name, roundOffDecimal(currentValue.toDouble() * it.rates[currentList[i].name]!!)))
-//                                    } catch ( e: Exception) {
-//                                        fail(e)
-//                                    }
-//                                }
-//                            } else {
-//                                returnList.addFirst(RatesListItem(appUtils.getString(R.string.eur_), 100.00))
-//                                for (item in it.rates) {
-//                                    returnList.add(RatesListItem(item.key, roundOffDecimal(item.value * 100)))
-//                                }
-//                            }
-//
-//                            val sorted = when (isInit) {
-//                                true -> firstTimeSorting(currentBase, returnList)
-//                                else -> returnList
-//                            }
-//
-//                            _currentList.value = sorted
-//                            _ratesListFetched.postValue(sorted)
-//                            showLoading(false)
-//                            postLoading(false)
-//                        }
-//
-//                    }
-//                    is ResponseError -> {
-//                        showLoading(false)
-//                        fail(response.t as Exception)
-//                        postLoading(false)
-//                        if(response.t !is InternetConnectionException)
-//                            handleError(response.t)
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
 
     private fun firstTimeSorting(base: String, returnList: LinkedList<RatesListItem>): LinkedList<RatesListItem> {
         val sorted = LinkedList<RatesListItem>(returnList.sortedWith(compareBy { it.name }))

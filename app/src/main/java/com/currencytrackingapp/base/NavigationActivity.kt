@@ -11,15 +11,18 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 
 
-class NavigationActivity : AppCompatActivity() { //BaseActivity() {
+class NavigationActivity : BaseActivity() {
 
     private val onDestinationChangedListener = this@NavigationActivity::onDestinationChanged
     private lateinit var appBarConfiguration: AppBarConfiguration
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation)
+
+        showSnackbar(findViewById(android.R.id.content))
 
         val navController: NavController = findNavController(R.id.mainNavHost)
 //        appBarConfiguration =

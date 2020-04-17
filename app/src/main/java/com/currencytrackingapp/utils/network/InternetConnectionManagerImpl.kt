@@ -25,30 +25,34 @@ class InternetConnectionManagerImpl(private val context: Context) : InternetConn
     }
 
 
-            override fun isInternetAvailable(mParentLayout: View): BroadcastReceiver {
+    override fun isInternetAvailable(mParentLayout: View): BroadcastReceiver {
 
-                val noIntSnaBar = Snackbar.make(mParentLayout, R.string.no_internet_connection_text_2, Snackbar.LENGTH_INDEFINITE)
+        val noIntSnaBar = Snackbar.make(
+            mParentLayout,
+            R.string.no_internet_connection_text_2,
+            Snackbar.LENGTH_INDEFINITE
+        )
 
-                val textView = noIntSnaBar.view.findViewById(R.id.snackbar_text) as TextView
-                textView.setTextColor(ContextCompat.getColor(mParentLayout.context, R.color.colorPrimary))
+        val textView = noIntSnaBar.view.findViewById(R.id.snackbar_text) as TextView
+        textView.setTextColor(ContextCompat.getColor(mParentLayout.context, R.color.colorPrimary))
 
-                return object : BroadcastReceiver() {
-                    override fun onReceive(context: Context, intent: Intent) {
+        return object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
 
-                        val extras = intent.extras
-                        val info = extras!!.getParcelable<Parcelable>("networkInfo") as NetworkInfo
+                val extras = intent.extras
+                val info = extras!!.getParcelable<Parcelable>("networkInfo") as NetworkInfo
 
-                        val state = info.state
+                val state = info.state
 
-                        isInternetOn = if (state == NetworkInfo.State.CONNECTED) {
-                            noIntSnaBar.dismiss()
-                            true
-                        } else {
-                            noIntSnaBar.show()
-                            false
-                        }
-                    }
+                isInternetOn = if (state == NetworkInfo.State.CONNECTED) {
+                    noIntSnaBar.dismiss()
+                    true
+                } else {
+                    noIntSnaBar.show()
+                    false
                 }
             }
+        }
+    }
 
 }

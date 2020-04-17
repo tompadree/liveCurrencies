@@ -2,6 +2,7 @@ package com.currencytrackingapp.utils.network
 
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.io.IOException
 
 class ResponseInterceptor(
     private val internetConnectionManager: InternetConnectionManager) : Interceptor {
@@ -12,9 +13,9 @@ class ResponseInterceptor(
 
     override fun intercept(chain: Interceptor.Chain?): Response {
         try {
-            if (!internetConnectionManager.hasInternetConnection()) {
-                throw InternetConnectionException()
-            }
+//            if (!internetConnectionManager.hasInternetConnection()) {
+//                throw IOException()
+//            }
 
             val request = chain!!.request()
             val response = chain.proceed(request)
@@ -30,9 +31,12 @@ class ResponseInterceptor(
             }
 
             return response
-        } catch (e: InternetConnectionException) {
+        } catch (e: NoInternetException) {
             throw e
         } catch (e: NetworkException) {
+            throw e
+        } catch (e: IOException) {
+            e.printStackTrace()
             throw e
         } catch (e: Exception) {
             e.printStackTrace()

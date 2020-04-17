@@ -26,9 +26,7 @@ class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi) : Currencie
                 return Result.Success(body)
             }
         }
-        return Result.Error(
-            IOException("Error loading data " +
-                "${response.code()} ${response.message()}")
+        return Result.Error(IOException("Error loading data " + "${response.code()} ${response.message()}")
         )
     }
 
