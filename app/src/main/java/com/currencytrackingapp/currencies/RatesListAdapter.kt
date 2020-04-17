@@ -3,11 +3,7 @@ package com.currencytrackingapp.currencies
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,22 +11,11 @@ import com.currencytrackingapp.R
 import com.currencytrackingapp.data.models.RatesListItem
 import com.currencytrackingapp.databinding.RatesItemBinding
 import com.currencytrackingapp.currencies.diffUtil.RatesDiffUtil
-import com.currencytrackingapp.currencies.viewholders.CurrentRateListViewHolder
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.rates_item.*
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import android.widget.TextView.OnEditorActionListener
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.annotation.RequiresApi
-import androidx.core.view.get
-import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
-import com.currencytrackingapp.generated.callback.OnClickListener
 import kotlinx.android.synthetic.main.rates_item.itemCurrenciesEtAmount
-import kotlinx.android.synthetic.main.rates_item.view.*
 
 
 /**
@@ -42,8 +27,6 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
 //    init {
 //        setHasStableIds(true)
 //    }
-//
-    var firstItemCurrentState = false
 
     var lastBase = ""
 
@@ -57,7 +40,6 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
             return
         else if(position == 0) {
             lastBase = getItem(position).name
-            holder.binding.itemCurrenciesEtAmount.clearFocus()
         }
 
         holder.bind(currenciesViewModel, getItem(position), position)
@@ -68,21 +50,10 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
     }
 
     // close keyboard if first item is not visible
-    override fun onViewDetachedFromWindow(holder: RatesViewHolder) {
-        holder.binding.itemCurrenciesEtAmount.clearFocus()
-        super.onViewDetachedFromWindow(holder)
-        holder.binding.itemCurrenciesEtAmount.clearFocus()
-        holder.onUnbind()
-    }
-
-    override fun onViewRecycled(holder: RatesViewHolder) {
-        holder.binding.itemCurrenciesEtAmount.clearFocus()
-        super.onViewRecycled(holder)
-        holder.binding.itemCurrenciesEtAmount.clearFocus()
-        holder.onUnbind()
-    }
-
-
+//    override fun onViewDetachedFromWindow(holder: RatesViewHolder) {
+//        super.onViewDetachedFromWindow(holder)
+//        holder.onUnbind()
+//    }
 
 //    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentRateListViewHolder {
 //        return CurrentRateListViewHolder.from(parent, activity)
@@ -91,8 +62,6 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
 //    override fun onBindViewHolder(holder: CurrentRateListViewHolder, position: Int) {
 //        holder.bindView(position, getItem(position), currenciesViewModel)
 //    }
-
-
 
 }
 
@@ -115,58 +84,35 @@ class RatesViewHolder private constructor(val binding: RatesItemBinding) : Recyc
 
     fun bind(viewModel: CurrenciesViewModel, item: RatesListItem, position: Int) {
 
-//        itemCurrenciesEtAmount.clearFocus()
-
         binding.viewModel = viewModel
         binding.ratesItem = item
         binding.executePendingBindings()
 
-
-
-
-
-
-        if(position == 0) { // && !itemCurrenciesEtAmount.isFocused) { // && !itemCurrenciesEtAmount.isEnabled) {
+        if(position == 0) {
             itemCurrenciesEtAmount.isEnabled = true
-
-            itemCurrenciesEtAmount.setTag(R.string.app_name, item.name)
 
             itemCurrenciesEtAmount.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     //Clear focus here from edittext
-
                     itemCurrenciesEtAmount.clearFocus()
                 }
                 false
             }
             itemCurrenciesEtAmount.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener{
-                override fun onViewDetachedFromWindow(v: View?) {
-//                Log.e("TEST", item.name + "  DETACHED")
-                    itemCurrenciesEtAmount.clearFocus()
-
-                    itemCurrenciesEtAmount.onFocusChangeListener = null
-                }
+                override fun onViewDetachedFromWindow(v: View?) {}
 
                 override fun onViewAttachedToWindow(v: View?) {
+                    // Workaround to remove first focus
+                    itemCurrenciesEtAmount.requestFocus()
                     itemCurrenciesEtAmount.clearFocus()
-//                Log.e("TEST", item.name + "  ATTACHED")
                 }
             })
-        }else {
-//            itemCurrenciesEtAmount.clearFocus()
-//            itemCurrenciesEtAmount.isEnabled = false
-//            itemCurrenciesEtAmount.onFocusChangeListener = null
+
         }
     }
 }
 
 class MyEditText(context: Context, attrs: AttributeSet) : EditText(context, attrs) {
-
-    var pressedFocus = false
-
-    fun onClickListener() {
-        pressedFocus = !pressedFocus
-    }
 
     override fun onKeyPreIme(keyCode: Int, event: KeyEvent): Boolean {
 
@@ -177,30 +123,12 @@ class MyEditText(context: Context, attrs: AttributeSet) : EditText(context, attr
 
     // close keyboard if first item is not visible
     override fun onFocusChanged(focused: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
+        super.onFocusChanged(focused, direction, previouslyFocusedRect)
 
-            if(pressedFocus) {
-
-                pressedFocus = false
-                return
-            }
-            super.onFocusChanged(focused, direction, previouslyFocusedRect)
-
-        Log.e("TEST", this.getTag(R.string.app_name).toString() + "  " + focused.toString())
         if(!focused) {
             // Close keyboard
             (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                 .hideSoftInputFromWindow(this.windowToken ?: return, 0)
-
-            pressedFocus = false
-//            clearFocus()
-//            pressedFocus = false
-
         }
-
-//        if(!pressedFocus && focused){
-//////            pressedFocus = true
-//            clearFocus()
-//        }
     }
-
 }
