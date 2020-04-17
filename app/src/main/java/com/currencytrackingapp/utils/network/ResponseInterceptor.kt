@@ -13,9 +13,9 @@ class ResponseInterceptor(
 
     override fun intercept(chain: Interceptor.Chain?): Response {
         try {
-//            if (!internetConnectionManager.hasInternetConnection()) {
-//                throw IOException()
-//            }
+            if (!internetConnectionManager.hasInternetConnection()) {
+                throw IOException()
+            }
 
             val request = chain!!.request()
             val response = chain.proceed(request)

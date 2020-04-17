@@ -25,9 +25,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
     // Not used at the moment
     private val isDataLoadingError = MutableLiveData<Boolean>()
 
-    // Not used at the moment
-    val _isInternetConnected = MutableLiveData<Boolean>(true)
-
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
@@ -55,9 +52,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
         it.isEmpty()
     }
 
-    var hasInternet = MutableLiveData<Boolean>(false)
-
-
     init {
         constantRefresh()
     }
@@ -82,7 +76,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
         viewModelScope.launch {
             while (true) {
                 delay(1000)
-//                refresh()
                 _forceUpdate.value = true
             }
         }
