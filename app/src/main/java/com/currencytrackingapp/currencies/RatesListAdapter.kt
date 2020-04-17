@@ -55,8 +55,10 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
         // Don't refresh first item if only new rates came
         if(position == 0 && lastBase == getItem(position).name)
             return
-        else if(position == 0)
+        else if(position == 0) {
             lastBase = getItem(position).name
+            holder.binding.itemCurrenciesEtAmount.clearFocus()
+        }
 
         holder.bind(currenciesViewModel, getItem(position), position)
     }
@@ -70,6 +72,14 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, pri
         holder.binding.itemCurrenciesEtAmount.clearFocus()
         super.onViewDetachedFromWindow(holder)
         holder.binding.itemCurrenciesEtAmount.clearFocus()
+        holder.onUnbind()
+    }
+
+    override fun onViewRecycled(holder: RatesViewHolder) {
+        holder.binding.itemCurrenciesEtAmount.clearFocus()
+        super.onViewRecycled(holder)
+        holder.binding.itemCurrenciesEtAmount.clearFocus()
+        holder.onUnbind()
     }
 
 
@@ -105,15 +115,21 @@ class RatesViewHolder private constructor(val binding: RatesItemBinding) : Recyc
 
     fun bind(viewModel: CurrenciesViewModel, item: RatesListItem, position: Int) {
 
+//        itemCurrenciesEtAmount.clearFocus()
+
         binding.viewModel = viewModel
         binding.ratesItem = item
         binding.executePendingBindings()
 
-        itemCurrenciesEtAmount.isEnabled = false
-        itemCurrenciesEtAmount.clearFocus()
+
+
+
+
 
         if(position == 0) { // && !itemCurrenciesEtAmount.isFocused) { // && !itemCurrenciesEtAmount.isEnabled) {
             itemCurrenciesEtAmount.isEnabled = true
+
+            itemCurrenciesEtAmount.setTag(R.string.app_name, item.name)
 
             itemCurrenciesEtAmount.setOnEditorActionListener { v, actionId, event ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -123,8 +139,23 @@ class RatesViewHolder private constructor(val binding: RatesItemBinding) : Recyc
                 }
                 false
             }
-        }else {
+            itemCurrenciesEtAmount.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener{
+                override fun onViewDetachedFromWindow(v: View?) {
+//                Log.e("TEST", item.name + "  DETACHED")
+                    itemCurrenciesEtAmount.clearFocus()
 
+                    itemCurrenciesEtAmount.onFocusChangeListener = null
+                }
+
+                override fun onViewAttachedToWindow(v: View?) {
+                    itemCurrenciesEtAmount.clearFocus()
+//                Log.e("TEST", item.name + "  ATTACHED")
+                }
+            })
+        }else {
+//            itemCurrenciesEtAmount.clearFocus()
+//            itemCurrenciesEtAmount.isEnabled = false
+//            itemCurrenciesEtAmount.onFocusChangeListener = null
         }
     }
 }
@@ -136,11 +167,6 @@ class MyEditText(context: Context, attrs: AttributeSet) : EditText(context, attr
     fun onClickListener() {
         pressedFocus = !pressedFocus
     }
-
-    override fun isInEditMode(): Boolean {
-        return super.isInEditMode()
-    }
-
 
     override fun onKeyPreIme(keyCode: Int, event: KeyEvent): Boolean {
 
@@ -159,10 +185,13 @@ class MyEditText(context: Context, attrs: AttributeSet) : EditText(context, attr
             }
             super.onFocusChanged(focused, direction, previouslyFocusedRect)
 
+        Log.e("TEST", this.getTag(R.string.app_name).toString() + "  " + focused.toString())
         if(!focused) {
             // Close keyboard
             (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                 .hideSoftInputFromWindow(this.windowToken ?: return, 0)
+
+            pressedFocus = false
 //            clearFocus()
 //            pressedFocus = false
 
