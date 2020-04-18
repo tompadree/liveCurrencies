@@ -18,6 +18,23 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
 
     private val mPending = AtomicBoolean(false)
 
+    // Snackbar
+    @Suppress("MemberVisibilityCanBePrivate")
+    var hasBeenHandled = false
+        private set // Allow external read but not write
+
+    /**
+     * Returns the content and prevents its use again.
+     */
+    fun getContentIfNotHandled(): T? {
+        return if (hasBeenHandled) {
+            null
+        } else {
+            hasBeenHandled = true
+            value
+        }
+    }
+
     fun observe(owner: LifecycleOwner, f: (T?) -> Unit) {
         observe(owner, Observer {
             f(it)

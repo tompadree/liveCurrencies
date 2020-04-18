@@ -33,7 +33,7 @@ class CurrenciesLocalDataSource(private val currenciesDao: CurrenciesDao) : Curr
 
     override suspend fun refreshRates(base: String) {}
 
-    override suspend fun saveTasks(rates: RatesObject) {
+    override suspend fun saveRates(rates: RatesObject) {
         currenciesDao.deleteRates()
         currenciesDao.insertRates(rates)
     }

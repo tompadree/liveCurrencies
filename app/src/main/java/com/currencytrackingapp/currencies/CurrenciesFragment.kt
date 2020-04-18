@@ -69,6 +69,9 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
     // Better solution than flag binded in layout
     var emptyCheck = true
     private fun setupObservers(){
+
+        observeError(viewModel.error)
+
         viewModel.empty.observe(this) {
 
             if(it == true) {

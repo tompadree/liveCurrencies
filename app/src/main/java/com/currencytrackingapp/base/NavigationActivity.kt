@@ -1,6 +1,10 @@
 package com.currencytrackingapp.base
 
+import android.content.BroadcastReceiver
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.currencytrackingapp.R
 import androidx.navigation.NavController
@@ -9,14 +13,17 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
+import com.currencytrackingapp.utils.network.InternetConnectionManager
+import org.koin.android.ext.android.inject
 
 
-class NavigationActivity : BaseActivity() {
+class NavigationActivity : AppCompatActivity() {
 
     private val onDestinationChangedListener = this@NavigationActivity::onDestinationChanged
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-
+    private val internetConnectionManager: InternetConnectionManager by inject()
+    private lateinit var internetReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,5 +63,13 @@ class NavigationActivity : BaseActivity() {
         destination: NavDestination,
         arguments: Bundle?) {
 
+    }
+
+    protected open fun showSnackbar(parentLayout: View){
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        internetReceiver = internetConnectionManager.isInternetAvailable(findViewById(android.R.id.content))
+        registerReceiver(internetReceiver, intentFilter)
     }
 }

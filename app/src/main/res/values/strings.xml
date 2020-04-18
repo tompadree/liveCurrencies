@@ -4,6 +4,7 @@
     <!--General-->
     <string name="ok">Ok</string>
     <string name="error_default">Something went wrong</string>
+    <string name="error_default_db">Something went wrong with database</string>
     <string name="no_internet_connection_title">No internet connection</string>
     <string name="no_internet_connection_text">Something is wrong with your internet connection</string>
     <string name="no_internet_connection_text_2">Something is wrong with your internet connection. Please check it.</string>

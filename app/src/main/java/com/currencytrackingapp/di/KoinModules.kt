@@ -1,6 +1,7 @@
 package com.currencytrackingapp.di
 
 import android.net.ConnectivityManager
+import androidx.fragment.app.FragmentActivity
 import androidx.room.Room
 import com.currencytrackingapp.BuildConfig
 import com.currencytrackingapp.currencies.CurrenciesViewModel
@@ -14,6 +15,8 @@ import com.currencytrackingapp.data.source.local.prefs.LocalPrefs
 import com.currencytrackingapp.data.source.local.prefs.LocalPrefsImpl
 import com.currencytrackingapp.data.source.remote.CurrenciesRemoteDataSource
 import com.currencytrackingapp.utils.helpers.AppUtils
+import com.currencytrackingapp.utils.helpers.dialogs.DialogManager
+import com.currencytrackingapp.utils.helpers.dialogs.DialogManagerImpl
 import com.currencytrackingapp.utils.helpers.impl.AppUtilsImpl
 import com.currencytrackingapp.utils.network.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -34,7 +37,7 @@ import java.util.concurrent.TimeUnit
 
 val AppModule = module {
     //    factory { (activity: Activity) -> ActivityManagerImpl(activity) as ActivityManager }
-//    factory { (activity: FragmentActivity) -> DialogManagerImpl(activity) as DialogManager }
+    factory { (activity: FragmentActivity) -> DialogManagerImpl(activity) as DialogManager }
 }
 
 val DataModule = module {

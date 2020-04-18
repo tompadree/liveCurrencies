@@ -6,7 +6,10 @@ import com.currencytrackingapp.data.source.remote.api.RevolutApi
 import com.currencytrackingapp.data.models.RatesObject
 import com.currencytrackingapp.data.models.Result
 import com.currencytrackingapp.data.source.CurrenciesDataStore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
+import java.lang.Exception
 
 /**
  * @author Tomislav Curis
@@ -18,21 +21,21 @@ class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi) : Currencie
     override fun observeRates(): LiveData<Result<RatesObject>> = observableRates
 
     override suspend fun getLatestRates(base: String): Result<RatesObject> {
-
-        val response = revolutApi.getLatestCurrencies(base)
-        if (response.isSuccessful) {
-            val body = response.body()
-            if (body != null) {
-                return Result.Success(body)
+            val response = revolutApi.getLatestCurrencies(base)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    return Result.Success(body)
+                }
             }
-        }
-        return Result.Error(IOException("Error loading data " + "${response.code()} ${response.message()}")
-        )
+            return Result.Error(
+                IOException("Error loading data " + "${response.code()} ${response.message()}")
+            )
     }
 
     override suspend fun refreshRates(base: String) {
         observableRates.value = getLatestRates(base)
     }
 
-    override suspend fun saveTasks(rates: RatesObject) {}
+    override suspend fun saveRates(rates: RatesObject) {}
 }

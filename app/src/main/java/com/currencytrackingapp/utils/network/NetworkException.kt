@@ -1,39 +1,39 @@
 package com.currencytrackingapp.utils.network
 
-import com.currencytrackingapp.data.models.NetworkErrors
+import com.currencytrackingapp.data.models.NetworkError
 import com.google.gson.Gson
 import okhttp3.Response
 import java.io.IOException
 
 class NetworkException(response: Response?) : IOException() {
 
-    private val localResponse: okhttp3.Response? = response
-    private var errors: NetworkErrors? = localResponse?.let { handleResponse(localResponse) }
+    private val localResponse: Response? = response
+    private var error: NetworkError? = localResponse?.let { handleResponse(localResponse) }
     override var message: String = localResponse?.let { getMessage(localResponse) } ?: "Some error"
 
 
-    private fun handleResponse(response: Response): NetworkErrors? {
+    private fun handleResponse(response: Response): NetworkError? {
         return try {
             val errorBodyJson = response.body()?.string() ?: "{}"
-            message = Gson().fromJson(errorBodyJson, NetworkErrors::class.java).messages!![0]
-             Gson().fromJson(errorBodyJson, NetworkErrors::class.java)
+            message = Gson().fromJson(errorBodyJson, NetworkError::class.java).message!!
+            Gson().fromJson(errorBodyJson, NetworkError::class.java)
         } catch (e: Exception) {
-            null
+            Gson().fromJson(e.localizedMessage, NetworkError::class.java)
         }
     }
 
     private fun getMessage(response: Response): String? {
         return try {
-            if(message != "Some error")
+            if (message != "Some error")
                 return message
             val errorBodyJson = response.body()?.string() ?: "{}"
-            Gson().fromJson(errorBodyJson, NetworkErrors::class.java).messages!![0]
+            Gson().fromJson(errorBodyJson, NetworkError::class.java).message!!
         } catch (e: Exception) {
-            null
+            e.localizedMessage
         }
     }
 
-    fun getErrors(): NetworkErrors? {
-        return errors
+    fun getErrors(): NetworkError? {
+        return error
     }
 }
