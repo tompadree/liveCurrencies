@@ -69,8 +69,9 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
     }
 
     fun refresh() {
-        _dataLoading.value = true
-        _forceUpdate.value = true
+        val isInternet = internetConnectionManager.hasInternetConnection()
+        _dataLoading.value = isInternet
+        _forceUpdate.value = isInternet
     }
 
     // Service not used for the sake of the MVVM demo

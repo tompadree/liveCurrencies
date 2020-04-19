@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "ratesObject")
-class RatesObject (
+class RatesObject constructor (
 
     @PrimaryKey(autoGenerate = true)
     var id : Int = 1,

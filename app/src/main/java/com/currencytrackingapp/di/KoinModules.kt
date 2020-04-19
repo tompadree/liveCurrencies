@@ -1,14 +1,15 @@
 package com.currencytrackingapp.di
 
-import android.net.ConnectivityManager
 import androidx.fragment.app.FragmentActivity
 import androidx.room.Room
 import com.currencytrackingapp.BuildConfig
 import com.currencytrackingapp.currencies.CurrenciesViewModel
+import com.currencytrackingapp.data.source.CurrenciesDataSource
 import com.currencytrackingapp.data.source.remote.api.APIConstants
 import com.currencytrackingapp.data.source.remote.api.RevolutApi
 import com.currencytrackingapp.data.source.CurrenciesRepository
 import com.currencytrackingapp.data.source.CurrenciesRepositoryImpl
+import com.currencytrackingapp.data.source.local.CurrenciesDao
 import com.currencytrackingapp.data.source.local.CurrenciesDatabase
 import com.currencytrackingapp.data.source.local.CurrenciesLocalDataSource
 import com.currencytrackingapp.data.source.local.prefs.LocalPrefs
@@ -25,6 +26,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -36,7 +38,6 @@ import java.util.concurrent.TimeUnit
  */
 
 val AppModule = module {
-    //    factory { (activity: Activity) -> ActivityManagerImpl(activity) as ActivityManager }
     factory { (activity: FragmentActivity) -> DialogManagerImpl(activity) as DialogManager }
 }
 
@@ -46,12 +47,12 @@ val DataModule = module {
     factory { AppUtilsImpl(get()) as AppUtils }
 
     single { Room.databaseBuilder(androidContext(), CurrenciesDatabase::class.java, "currencies_db").build() }
-    single { get<CurrenciesDatabase>().currenciesDao() }
+    single  { get<CurrenciesDatabase>().currenciesDao() }
 
-    single { CurrenciesLocalDataSource(get()) }
-    single { CurrenciesRemoteDataSource(get()) }
+    single(named("local")) { CurrenciesLocalDataSource(get()) as CurrenciesDataSource }
+    single(named("remote")) { CurrenciesRemoteDataSource(get()) as CurrenciesDataSource }
 
-    single { CurrenciesRepositoryImpl(get(), get()) as CurrenciesRepository }
+    single { CurrenciesRepositoryImpl(get(qualifier = named("local")),get(qualifier = named("remote"))) as CurrenciesRepository }
 
     viewModel { CurrenciesViewModel(get(), get()) }
 }
@@ -60,8 +61,6 @@ val DataModule = module {
 val NetModule = module {
 
     factory { InternetConnectionManagerImpl(get()) as InternetConnectionManager }
-
-    single { ConnectivityChecker(get())}
 
     single {
 

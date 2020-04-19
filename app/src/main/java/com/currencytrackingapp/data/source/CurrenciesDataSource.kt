@@ -7,7 +7,7 @@ import com.currencytrackingapp.data.models.Result
 /**
  * @author Tomislav Curis
  */
-interface CurrenciesDataStore {
+interface CurrenciesDataSource {
 
     fun observeRates(): LiveData<Result<RatesObject>>
 

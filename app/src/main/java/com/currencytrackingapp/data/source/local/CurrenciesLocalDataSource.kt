@@ -3,7 +3,7 @@ package com.currencytrackingapp.data.source.local
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.currencytrackingapp.data.models.RatesObject
-import com.currencytrackingapp.data.source.CurrenciesDataStore
+import com.currencytrackingapp.data.source.CurrenciesDataSource
 import com.currencytrackingapp.data.models.Result
 import com.currencytrackingapp.data.models.Result.Success
 import com.currencytrackingapp.data.models.Result.Error
@@ -14,7 +14,7 @@ import java.lang.Exception
 /**
  * @author Tomislav Curis
  */
-class CurrenciesLocalDataSource(private val currenciesDao: CurrenciesDao) : CurrenciesDataStore {
+class CurrenciesLocalDataSource(private val currenciesDao: CurrenciesDao) : CurrenciesDataSource {
 
     override fun observeRates(): LiveData<Result<RatesObject>> {
         return currenciesDao.observeRates().map {

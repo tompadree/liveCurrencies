@@ -5,16 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import com.currencytrackingapp.data.source.remote.api.RevolutApi
 import com.currencytrackingapp.data.models.RatesObject
 import com.currencytrackingapp.data.models.Result
-import com.currencytrackingapp.data.source.CurrenciesDataStore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.currencytrackingapp.data.source.CurrenciesDataSource
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * @author Tomislav Curis
  */
-class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi) : CurrenciesDataStore {
+class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi) : CurrenciesDataSource {
 
     private val observableRates = MutableLiveData<Result<RatesObject>>()
 

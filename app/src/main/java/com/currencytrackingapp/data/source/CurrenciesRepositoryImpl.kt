@@ -13,8 +13,8 @@ import retrofit2.Response
 /**
  * @author Tomislav Curis
  */
-class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: CurrenciesLocalDataSource,
-                               private val currenciesRemoteDataSource: CurrenciesRemoteDataSource) : CurrenciesRepository {
+class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: CurrenciesDataSource,
+                               private val currenciesRemoteDataSource: CurrenciesDataSource) : CurrenciesRepository {
 
     override fun observeRates(): LiveData<Result<RatesObject>> {
         wrapEspressoIdlingResource {
