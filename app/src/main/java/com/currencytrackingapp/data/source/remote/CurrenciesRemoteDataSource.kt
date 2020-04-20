@@ -6,12 +6,14 @@ import com.currencytrackingapp.data.source.remote.api.RevolutApi
 import com.currencytrackingapp.data.models.RatesObject
 import com.currencytrackingapp.data.models.Result
 import com.currencytrackingapp.data.source.CurrenciesDataSource
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import java.io.IOException
 
 /**
  * @author Tomislav Curis
  */
-class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi) : CurrenciesDataSource {
+class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi, private val dispatchers: CoroutineDispatcher = Dispatchers.IO) : CurrenciesDataSource {
 
     private val observableRates = MutableLiveData<Result<RatesObject>>()
 
@@ -35,4 +37,6 @@ class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi) : Currencie
     }
 
     override suspend fun saveRates(rates: RatesObject) {}
+
+    override suspend fun deleteRates() {}
 }

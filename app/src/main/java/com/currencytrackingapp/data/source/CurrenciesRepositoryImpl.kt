@@ -8,6 +8,8 @@ import com.currencytrackingapp.data.models.Result
 import com.currencytrackingapp.data.models.Result.Success
 import com.currencytrackingapp.data.models.Result.Error
 import com.currencytrackingapp.utils.wrapEspressoIdlingResource
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.Response
 
 /**
@@ -23,7 +25,7 @@ class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: Currencies
     }
 
     override suspend fun getLatestRates(forceUpdate: Boolean, base: String): Result<RatesObject> {
-        // for test is it running or not 1 or 0
+        // Wrapper for test is it running or not 1 or 0
         wrapEspressoIdlingResource {
             if (forceUpdate) {
                 try {
@@ -32,7 +34,7 @@ class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: Currencies
                     return Error(ex)
                 }
             }
-            return currenciesLocalDataSource.getLatestRates("")
+            return currenciesLocalDataSource.getLatestRates(base)
         }
     }
 
@@ -43,22 +45,26 @@ class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: Currencies
 //    }
 
     override suspend fun saveRates(rates: RatesObject) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private suspend fun updateRatesFromRemoteDataSource(base: String){
-
-        val remoteRates = currenciesRemoteDataSource.getLatestRates(base)
-        if (remoteRates is Success) {
-            currenciesLocalDataSource.saveRates(remoteRates.data)
-
-        } else if (remoteRates is Error) {
-
-            throw remoteRates.exception
+        coroutineScope {
+            try {
+                launch { currenciesLocalDataSource.saveRates(rates) }
+            } catch (e: Exception) {
+                throw e
+            }
         }
-
-
     }
 
+    private suspend fun updateRatesFromRemoteDataSource(base: String) {
+        wrapEspressoIdlingResource {
+            val remoteRates = currenciesRemoteDataSource.getLatestRates(base)
+            if (remoteRates is Success) {
+//                currenciesLocalDataSource.deleteRates()
+//                val ratesObj = RatesObject(1,remoteRates.data.base, remoteRates.data.base, remoteRates.data.rates)
+                currenciesLocalDataSource.saveRates(remoteRates.data)
+            } else if (remoteRates is Error) {
+                throw remoteRates.exception
+            }
+        }
+    }
 
 }

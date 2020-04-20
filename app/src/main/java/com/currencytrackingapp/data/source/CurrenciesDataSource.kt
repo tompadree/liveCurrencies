@@ -16,4 +16,6 @@ interface CurrenciesDataSource {
     suspend fun refreshRates(base: String)
 
     suspend fun saveRates(rates: RatesObject)
+
+    suspend fun deleteRates()
 }

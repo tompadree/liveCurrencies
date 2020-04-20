@@ -7,6 +7,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.currencytrackingapp.data.models.RatesListItem
 import android.widget.TextView
+import com.currencytrackingapp.R
 import com.currencytrackingapp.utils.helpers.CountryHelper
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -38,7 +39,7 @@ fun setFormattedText(textView: TextView, name: String) {
 fun setIcon(imageView: CircleImageView, name: String) {
     if (name == "") return
 
-    imageView.setImageResource(CountryHelper.getFlagForISO(name))
+    imageView.setImageResource(CountryHelper.getFlagForISO(name)?: R.drawable.ic_european_union)
     imageView.clearFocus()
 }
 

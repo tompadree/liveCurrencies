@@ -9,23 +9,42 @@ import java.lang.Exception
  * @author Tomislav Curis
  */
 class FakeDataSource(var ratesObject: RatesObject?
-                     = RatesObject(1,"EUR","2018-09-06", HashMap<String, Double>())
+                     = RatesObject(1,"ZAR","2018-08-06", HashMap<String, Double>())
 ) : CurrenciesDataSource {
-
-    override fun observeRates(): LiveData<Result<RatesObject>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override suspend fun getLatestRates(base: String): Result<RatesObject> {
         ratesObject?.let { return Result.Success(it) }
         return Result.Error(Exception("Exception"))
     }
 
-    override suspend fun refreshRates(base: String) {
+    override suspend fun deleteRates() {
+        ratesObject = null
+    }
+//
+//    override suspend fun saveRates(rates: RatesObject) {
+//        ratesObject = rates
+//    }
+
+//    override suspend fun deleteRates() {
+////        ratesObject = null //RatesObject(1,"","", mutableMapOf<String,Double>() as HashMap<String, Double>)
+//        ratesObject?.id = null
+//        ratesObject?.base = ""
+//        ratesObject?.date = ""
+//        ratesObject?.rates?.clear()
+//    }
+
+    override suspend fun saveRates(rates: RatesObject) {
+        ratesObject?.id = rates.id
+        ratesObject?.base = rates.base
+        ratesObject?.date = rates.date
+        ratesObject?.rates = rates.rates
+    }
+
+    override fun observeRates(): LiveData<Result<RatesObject>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override suspend fun saveRates(rates: RatesObject) {
-        ratesObject = rates
+    override suspend fun refreshRates(base: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

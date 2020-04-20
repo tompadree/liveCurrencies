@@ -22,6 +22,8 @@ import com.currencytrackingapp.utils.helpers.impl.AppUtilsImpl
 import com.currencytrackingapp.utils.network.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -49,7 +51,9 @@ val DataModule = module {
     single { Room.databaseBuilder(androidContext(), CurrenciesDatabase::class.java, "currencies_db").build() }
     single  { get<CurrenciesDatabase>().currenciesDao() }
 
-    single(named("local")) { CurrenciesLocalDataSource(get()) as CurrenciesDataSource }
+    single { Dispatchers.IO }
+
+    single(named("local")) { CurrenciesLocalDataSource(get(), get()) as CurrenciesDataSource }
     single(named("remote")) { CurrenciesRemoteDataSource(get()) as CurrenciesDataSource }
 
     single { CurrenciesRepositoryImpl(get(qualifier = named("local")),get(qualifier = named("remote"))) as CurrenciesRepository }

@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken
 class RatesObject constructor (
 
     @PrimaryKey(autoGenerate = true)
-    var id : Int = 1,
+    var id : Int? = 1,
 
     @SerializedName("base")
     var base: String = "",

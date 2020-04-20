@@ -11,7 +11,7 @@ interface CurrenciesRepository {
 
     fun observeRates(): LiveData<Result<RatesObject>>
 
-    suspend fun getLatestRates(forceUpdate: Boolean = false, base: String): Result<RatesObject>
+    suspend fun getLatestRates(forceUpdate: Boolean = false, base: String = "EUR"): Result<RatesObject>
 
 //    suspend fun refreshRates(base: String)
 
