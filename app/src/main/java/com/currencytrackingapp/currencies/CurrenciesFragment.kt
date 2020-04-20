@@ -63,6 +63,7 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
         shimmerViewContainer.startShimmer()
         setupObservers()
         setupRv()
+        viewModel.initVM()
 
     }
 

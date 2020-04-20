@@ -2,6 +2,7 @@ package com.currencytrackingapp.currencies
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -31,16 +32,23 @@ fun setItems(listView: RecyclerView, items: List<RatesListItem>?) {
 
 @BindingAdapter("subTitleName")
 fun setFormattedText(textView: TextView, name: String) {
-    if (name == "") return
-    textView.text = textView.resources.getString(CountryHelper.getNameForISO(name))
+//    if (name.isNullOrEmpty()) return
+    try {
+        textView.text = textView.resources.getString(CountryHelper.getNameForISO(name))
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
 
 @BindingAdapter("imageName")
 fun setIcon(imageView: CircleImageView, name: String) {
-    if (name == "") return
-
-    imageView.setImageResource(CountryHelper.getFlagForISO(name)?: R.drawable.ic_european_union)
-    imageView.clearFocus()
+//    if (name.isNullOrEmpty()) return
+    try {
+        imageView.setImageResource(CountryHelper.getFlagForISO(name))
+        imageView.clearFocus()
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
 
 @BindingAdapter("app:onBaseChanged")

@@ -20,10 +20,6 @@ class FakeDataSource(var ratesObject: RatesObject?
     override suspend fun deleteRates() {
         ratesObject = null
     }
-//
-//    override suspend fun saveRates(rates: RatesObject) {
-//        ratesObject = rates
-//    }
 
 //    override suspend fun deleteRates() {
 ////        ratesObject = null //RatesObject(1,"","", mutableMapOf<String,Double>() as HashMap<String, Double>)
@@ -39,6 +35,10 @@ class FakeDataSource(var ratesObject: RatesObject?
         ratesObject?.date = rates.date
         ratesObject?.rates = rates.rates
     }
+
+//    override suspend fun saveRates(rates: RatesObject) {
+//        ratesObject = rates
+//    }
 
     override fun observeRates(): LiveData<Result<RatesObject>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

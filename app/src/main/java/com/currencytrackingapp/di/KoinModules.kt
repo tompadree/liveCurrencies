@@ -64,7 +64,7 @@ val DataModule = module {
 
 val NetModule = module {
 
-    factory { InternetConnectionManagerImpl(get()) as InternetConnectionManager }
+    single { InternetConnectionManagerImpl() as InternetConnectionManager }
 
     single {
 

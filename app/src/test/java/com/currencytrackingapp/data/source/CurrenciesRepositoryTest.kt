@@ -25,48 +25,48 @@ import org.koin.test.KoinTestRule
 @ExperimentalCoroutinesApi
 class CurrenciesRepositoryTest {
 
+    companion object {
+        // Dataset
+        val dummyRates: HashMap<String, Double> =
+            hashMapOf(
+                "AUD" to 1.6178,
+                "BGN" to 1.95,
+                "BRL" to 4.7958,
+                "CAD" to 1.5351,
+                "CHF" to 1.1285,
+                "CNY" to 7.9518,
+                "CZK" to 25.737,
+                "DKK" to 7.463,
+                "GBP" to 0.899,
+                "HKD" to 9.1401,
+                "HRK" to 7.4404,
+                "HUF" to 326.77,
+                "IDR" to 17338.00,
+                "ILS" to 4.1741,
+                "INR" to 83.788,
+                "ISK" to 127.91,
+                "JPY" to 129.66,
+                "KRW" to 1305.9,
+                "MXN" to 22.384,
+                "MYR" to 4.8161,
+                "NOK" to 9.7842,
+                "NZD" to 1.7648,
+                "PHP" to 62.645,
+                "PLN" to 4.3219,
+                "RON" to 4.6424,
+                "RUB" to 79.642,
+                "SEK" to 10.6,
+                "SGD" to 1.6013,
+                "THB" to 38.162,
+                "TRY" to 7.6346,
+                "USD" to 1.1644,
+                "ZAR" to 17.838
+            )
 
-
-    // Dataset
-    private val rates: HashMap<String, Double> =
-        hashMapOf(
-            "AUD" to 1.6178,
-            "BGN" to 1.95,
-            "BRL" to 4.7958,
-            "CAD" to 1.5351,
-            "CHF" to 1.1285,
-            "CNY" to 7.9518,
-            "CZK" to 25.737,
-            "DKK" to 7.463,
-            "GBP" to 0.899,
-            "HKD" to 9.1401,
-            "HRK" to 7.4404,
-            "HUF" to 326.77,
-            "IDR" to 17338.00,
-            "ILS" to 4.1741,
-            "INR" to 83.788,
-            "ISK" to 127.91,
-            "JPY" to 129.66,
-            "KRW" to 1305.9,
-            "MXN" to 22.384,
-            "MYR" to 4.8161,
-            "NOK" to 9.7842,
-            "NZD" to 1.7648,
-            "PHP" to 62.645,
-            "PLN" to 4.3219,
-            "RON" to 4.6424,
-            "RUB" to 79.642,
-            "SEK" to 10.6,
-            "SGD" to 1.6013,
-            "THB" to 38.162,
-            "TRY" to 7.6346,
-            "USD" to 1.1644,
-            "ZAR" to 17.838
-        )
-
-    private val ratesObj = RatesObject(1,"EUR","2018-09-06", rates)
-    private val ratesObjLocal = RatesObject(2,"AUD","2018-09-07", rates)
-    private val ratesObjRemote = RatesObject(3,"CAD","2018-09-08", rates)
+    }
+    private val ratesObj = RatesObject(1,"EUR","2018-09-06", dummyRates)
+    private val ratesObjLocal = RatesObject(2,"AUD","2018-09-07", dummyRates)
+    private val ratesObjRemote = RatesObject(3,"CAD","2018-09-08", dummyRates)
 
     private lateinit var currenciesLocalDataSource: FakeDataSource
     private lateinit var currenciesRemoteDataSource: FakeDataSource

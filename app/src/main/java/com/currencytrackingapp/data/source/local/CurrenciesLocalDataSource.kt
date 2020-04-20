@@ -35,7 +35,7 @@ class CurrenciesLocalDataSource(private val currenciesDao: CurrenciesDao, privat
     override suspend fun refreshRates(base: String) {}
 
     override suspend fun saveRates(rates: RatesObject) = withContext(dispatchers) {
-//        currenciesDao.deleteRates()
+        currenciesDao.deleteRates()
         currenciesDao.insertRates(rates)
     }
 

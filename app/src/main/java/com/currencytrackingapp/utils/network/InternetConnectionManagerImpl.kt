@@ -9,19 +9,24 @@ import android.os.Parcelable
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.multidex.BuildConfig
 import com.currencytrackingapp.R
 import com.currencytrackingapp.utils.network.InternetConnectionManager
 import com.google.android.material.snackbar.Snackbar
 
 
-class InternetConnectionManagerImpl(private val context: Context) : InternetConnectionManager {
+class InternetConnectionManagerImpl : InternetConnectionManager {
 
     var isInternetOn = true
 
     override fun hasInternetConnection(): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-
-        return cm!!.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected
+        return isInternetOn
+//        if (BuildConfig.DEBUG) return true
+//
+//            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+//
+//        if(cm == null) return true
+//        return cm!!.activeNetworkInfo != null && cm.activeNetworkInfo.isConnected
     }
 
 

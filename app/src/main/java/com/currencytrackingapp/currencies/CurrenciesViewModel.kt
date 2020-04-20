@@ -18,14 +18,16 @@ import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.HashMap
 
+
 class CurrenciesViewModel(private val repository: CurrenciesRepository, private val internetConnectionManager: InternetConnectionManager) : ViewModel() { //} BaseViewModel() { //, KoinComponent {
 
-    private val _currentBase = ObservableField<String>("EUR")
-    private val _currentValue = ObservableField<String>("100")
+    val _currentBase = ObservableField<String>("EUR")
+    val _currentValue = ObservableField<String>("100")
+
     private val _snackbarText = SingleLiveEvent<Int>()
 //    val snackbarText: LiveData<Int> = _snackbarText
 
-    private val isDataLoadingError = MutableLiveData<Boolean>(false)
+    val isDataLoadingError = MutableLiveData<Boolean>(false)
 
 
     protected val _error = SingleLiveEvent<Throwable>()
@@ -60,26 +62,29 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
         it.isEmpty()
     }
 
-    init {
+    fun initVM() {
+        _dataLoading.value = true
         constantRefresh()
     }
 
-    fun fetchRates(forceUpdate: Boolean) {
-        _forceUpdate.value = forceUpdate
-    }
+//    fun fetchRates(forceUpdate: Boolean) {
+////        _dataLoading.value = true
+//        _forceUpdate.value = forceUpdate
+//    }
 
-    fun refresh() {
-        val isInternet = internetConnectionManager.hasInternetConnection()
-        _dataLoading.value = isInternet
+    fun refresh(loading: Boolean) {
+        val isInternet = internetConnectionManager.hasInternetConnection() && !isDataLoadingError.value!!
+        _dataLoading.value = isInternet && loading
         _forceUpdate.value = isInternet
     }
 
     // Service not used for the sake of the MVVM demo
-    private fun constantRefresh() {
+    fun constantRefresh() {
         viewModelScope.launch {
             while (true) {
                 delay(1000)
-                fetchRates(!isDataLoadingError.value!!)
+                refresh(false)
+//                fetchRates(!isDataLoadingError.value!!)
             }
         }
     }
@@ -146,12 +151,12 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
     fun onItemClicked(ratesItem: RatesListItem){
         _currentBase.set(ratesItem.name)
         _currentValue.set(ratesItem.currentRate.toString())
-        _forceUpdate.value = true
+        _forceUpdate.value = internetConnectionManager.hasInternetConnection()
     }
 
     fun onBaseChanged(value: String) {
         _currentValue.set(value)
-        _forceUpdate.value = true
+        _forceUpdate.value = internetConnectionManager.hasInternetConnection()
     }
 
     private fun sorting(firstValue : Double, base: String, returnList: LinkedList<RatesListItem>): LinkedList<RatesListItem> {

@@ -49,9 +49,9 @@ class CurrentRateListViewHolder(val binding: RatesItemBinding, val activity: Act
         initKeyBoardListener(itemCurrenciesEtAmount)
         itemCurrenciesTvISO.text = ratesListItem.name
 
-        itemCurrenciesTvName.text = activity.getString(CountryHelper.getNameForISO(ratesListItem.name))
-
-        itemCurrenciesIvFlag.setImageResource(CountryHelper.getFlagForISO(ratesListItem.name))
+//        itemCurrenciesTvName.text = activity.getString(CountryHelper.getNameForISO(ratesListItem.name))
+//
+//        itemCurrenciesIvFlag.setImageResource(CountryHelper.getFlagForISO(ratesListItem.name))
 
         itemCurrenciesEtAmount.setText(ratesListItem.currentRate.toString())
         itemCurrenciesEtAmount.clearFocus()

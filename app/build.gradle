@@ -157,7 +157,10 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$archTestingVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
     testImplementation "com.google.truth:truth:1.0.1"
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
 
+//    testImplementation "org.mockito:mockito-android:$mockitoVersion"
 
 
     // AndroidX Test - Instrumented testing
@@ -167,7 +170,9 @@ dependencies {
     // Dependencies for Android instrumented unit tests
     androidTestImplementation "junit:junit:$junitVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
-    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+//    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
+
 
     androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:$dexMakerVersion"
 
