@@ -56,9 +56,12 @@ val DataModule = module {
     single(named("local")) { CurrenciesLocalDataSource(get(), get()) as CurrenciesDataSource }
     single(named("remote")) { CurrenciesRemoteDataSource(get()) as CurrenciesDataSource }
 
-    single { CurrenciesRepositoryImpl(get(qualifier = named("local")),get(qualifier = named("remote"))) as CurrenciesRepository }
 
     viewModel { CurrenciesViewModel(get(), get()) }
+}
+
+val RepoModule = module {
+    single { CurrenciesRepositoryImpl(get(qualifier = named("local")),get(qualifier = named("remote"))) as CurrenciesRepository }
 }
 
 

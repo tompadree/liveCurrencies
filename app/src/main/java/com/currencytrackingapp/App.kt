@@ -44,7 +44,7 @@ class App : MultiDexApplication() { //, KoinComponent {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(AppModule, DataModule, NetModule))
+            modules(listOf(AppModule, DataModule, RepoModule, NetModule))
         }
     }
 

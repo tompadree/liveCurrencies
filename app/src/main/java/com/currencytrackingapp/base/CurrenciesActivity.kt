@@ -17,9 +17,9 @@ import com.currencytrackingapp.utils.network.InternetConnectionManager
 import org.koin.android.ext.android.inject
 
 
-class NavigationActivity : AppCompatActivity() {
+class CurrenciesActivity : AppCompatActivity() {
 
-    private val onDestinationChangedListener = this@NavigationActivity::onDestinationChanged
+    private val onDestinationChangedListener = this@CurrenciesActivity::onDestinationChanged
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val internetConnectionManager: InternetConnectionManager by inject()

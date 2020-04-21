@@ -1,6 +1,5 @@
 package com.currencytrackingapp.currencies
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.currencytrackingapp.R

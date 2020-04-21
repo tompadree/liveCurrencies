@@ -16,7 +16,10 @@ import androidx.test.espresso.idling.CountingIdlingResource
 
 /**
  * Contains a static reference to [IdlingResource]
- */
+ *
+ * Idling resources tell Espresso that the app is idle or busy. This is needed when operations
+ * are not scheduled in the main Looper (for example when executed on a different thread).
+*/
 object EspressoIdlingResource {
 
     private const val RESOURCE = "GLOBAL"

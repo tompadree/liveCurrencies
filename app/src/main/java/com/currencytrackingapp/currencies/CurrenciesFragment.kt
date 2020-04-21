@@ -2,17 +2,14 @@ package com.currencytrackingapp.currencies
 
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
 import androidx.recyclerview.widget.SimpleItemAnimator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.currencytrackingapp.R
 import com.currencytrackingapp.databinding.FragmentCurrenciesBinding
 import com.currencytrackingapp.base.BindingFragment
-import com.currencytrackingapp.base.NavigationActivity
-import com.facebook.shimmer.ShimmerFrameLayout
+import com.currencytrackingapp.base.CurrenciesActivity
 import kotlinx.android.synthetic.main.fragment_currencies.*
 import timber.log.Timber
 import com.currencytrackingapp.utils.helpers.observe
@@ -99,7 +96,7 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
 
     private fun setupRv() {
         if (viewModel != null) {
-            currentRatesAdapter = RatesListAdapter(viewModel, activity as NavigationActivity)
+            currentRatesAdapter = RatesListAdapter(viewModel)
 
             with(currenciesRv) {
                 layoutManager = LinearLayoutManager(context)

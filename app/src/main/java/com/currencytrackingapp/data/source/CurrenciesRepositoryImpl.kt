@@ -54,6 +54,15 @@ class CurrenciesRepositoryImpl(private val currenciesLocalDataSource: Currencies
         }
     }
 
+    override suspend fun deleteRates() {
+        coroutineScope {
+            try {
+                launch { currenciesLocalDataSource.deleteRates() }
+            } catch (e: Exception) {
+                throw e
+            }
+        }    }
+
     private suspend fun updateRatesFromRemoteDataSource(base: String) {
         wrapEspressoIdlingResource {
             val remoteRates = currenciesRemoteDataSource.getLatestRates(base)

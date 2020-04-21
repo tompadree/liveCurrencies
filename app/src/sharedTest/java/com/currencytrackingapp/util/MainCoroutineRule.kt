@@ -1,4 +1,4 @@
-package com.currencytrackingapp
+package com.currencytrackingapp.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

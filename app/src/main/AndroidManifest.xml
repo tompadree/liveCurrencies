@@ -16,9 +16,9 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:replace="android:appComponentFactory">
-<!--        <activity android:name=".activities.NavigationActivity"></activity>-->
+<!--        <activity android:name=".activities.CurrenciesActivity"></activity>-->
         <activity
-                android:name=".base.NavigationActivity"
+                android:name=".base.CurrenciesActivity"
                 android:noHistory="true"
                 android:screenOrientation="portrait"
                 android:theme="@style/NoActionBar">

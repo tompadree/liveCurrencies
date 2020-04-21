@@ -17,4 +17,6 @@ interface CurrenciesRepository {
 
     suspend fun saveRates(rates: RatesObject)
 
+    suspend fun deleteRates()
+
 }

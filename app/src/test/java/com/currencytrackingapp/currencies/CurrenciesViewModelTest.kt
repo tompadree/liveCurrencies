@@ -2,10 +2,7 @@ package com.currencytrackingapp.currencies
 
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import com.currencytrackingapp.MainCoroutineRule
-import com.currencytrackingapp.data.models.RatesListItem
+import com.currencytrackingapp.util.MainCoroutineRule
 import com.currencytrackingapp.data.source.FakeRepository
 import com.currencytrackingapp.utils.network.InternetConnectionManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,10 +14,8 @@ import com.currencytrackingapp.di.DataModule
 import com.currencytrackingapp.di.NetModule
 import com.currencytrackingapp.getOrAwaitValue
 import com.currencytrackingapp.observeForTesting
-import com.currencytrackingapp.utils.SingleLiveEvent
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
 import org.junit.Test
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule

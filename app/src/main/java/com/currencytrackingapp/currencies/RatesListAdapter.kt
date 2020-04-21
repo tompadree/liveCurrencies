@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.rates_item.itemCurrenciesEtAmount
 /**
  * @author Tomislav Curis
  */
-class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel, private val activity: Activity)
+class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel)
     : ListAdapter<RatesListItem, RatesViewHolder>(RatesDiffUtil()) { //CurrentRateListViewHolde>(RatesDiffUtil()) {
 
 //    init {
