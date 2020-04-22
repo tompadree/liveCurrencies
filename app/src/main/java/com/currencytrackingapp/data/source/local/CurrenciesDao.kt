@@ -7,7 +7,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.currencytrackingapp.data.models.RatesObject
-import com.currencytrackingapp.data.models.RatesListItem
 
 /**
  * @author Tomislav Curis
@@ -25,13 +24,11 @@ interface CurrenciesDao {
     fun observeRates(): LiveData<RatesObject>
 
     /**
-     * Delete all tasks.
+     * Delete all rates.
      */
     @Query("DELETE FROM ratesObject")
     suspend fun deleteRates()
 
-//    @Query("SELECT rates FROM ratesObject")
-//    fun observeRates(): LiveData<HashMap<String, Double>>
 
     /**
      * Select all rates from the rates table.

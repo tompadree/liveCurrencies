@@ -12,13 +12,9 @@ import com.currencytrackingapp.data.source.CurrenciesRepositoryImpl
 import com.currencytrackingapp.data.source.local.CurrenciesDao
 import com.currencytrackingapp.data.source.local.CurrenciesDatabase
 import com.currencytrackingapp.data.source.local.CurrenciesLocalDataSource
-import com.currencytrackingapp.data.source.local.prefs.LocalPrefs
-import com.currencytrackingapp.data.source.local.prefs.LocalPrefsImpl
 import com.currencytrackingapp.data.source.remote.CurrenciesRemoteDataSource
-import com.currencytrackingapp.utils.helpers.AppUtils
 import com.currencytrackingapp.utils.helpers.dialogs.DialogManager
 import com.currencytrackingapp.utils.helpers.dialogs.DialogManagerImpl
-import com.currencytrackingapp.utils.helpers.impl.AppUtilsImpl
 import com.currencytrackingapp.utils.network.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import io.reactivex.schedulers.Schedulers
@@ -44,9 +40,6 @@ val AppModule = module {
 }
 
 val DataModule = module {
-
-    single { LocalPrefsImpl(get()) as LocalPrefs }
-    factory { AppUtilsImpl(get()) as AppUtils }
 
     single { Room.databaseBuilder(androidContext(), CurrenciesDatabase::class.java, "currencies_db").build() }
     single  { get<CurrenciesDatabase>().currenciesDao() }

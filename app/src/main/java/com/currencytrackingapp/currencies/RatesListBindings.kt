@@ -2,13 +2,11 @@ package com.currencytrackingapp.currencies
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.currencytrackingapp.data.models.RatesListItem
 import android.widget.TextView
-import com.currencytrackingapp.R
 import com.currencytrackingapp.utils.helpers.CountryHelper
 import de.hdodenhof.circleimageview.CircleImageView
 

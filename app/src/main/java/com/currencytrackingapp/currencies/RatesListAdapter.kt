@@ -1,14 +1,11 @@
 package com.currencytrackingapp.currencies
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.currencytrackingapp.R
 import com.currencytrackingapp.data.models.RatesListItem
 import com.currencytrackingapp.databinding.RatesItemBinding
 import com.currencytrackingapp.currencies.diffUtil.RatesDiffUtil
@@ -25,12 +22,7 @@ import kotlinx.android.synthetic.main.rates_item.itemCurrenciesEtAmount
 class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel)
     : ListAdapter<RatesListItem, RatesViewHolder>(RatesDiffUtil()) { //CurrentRateListViewHolde>(RatesDiffUtil()) {
 
-    init {
-        Log.e("TEST", "ADAPTER IS INIT")
-//        setHasStableIds(true)
-    }
-
-    var lastBase = ""
+    private var lastBase = ""
 
     override fun getItemId(position: Int): Long = getItem(position).name.hashCode().toLong()
     override fun getItemViewType(position: Int) = position
@@ -50,21 +42,6 @@ class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RatesViewHolder {
         return RatesViewHolder.from(parent)
     }
-
-    // close keyboard if first item is not visible
-//    override fun onViewDetachedFromWindow(holder: RatesViewHolder) {
-//        super.onViewDetachedFromWindow(holder)
-//        holder.onUnbind()
-//    }
-
-//    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentRateListViewHolder {
-//        return CurrentRateListViewHolder.from(parent, activity)
-//    }
-//
-//    override fun onBindViewHolder(holder: CurrentRateListViewHolder, position: Int) {
-//        holder.bindView(position, getItem(position), currenciesViewModel)
-//    }
-
 }
 
 class RatesViewHolder private constructor(val binding: RatesItemBinding) : RecyclerView.ViewHolder(binding.root), LayoutContainer {
@@ -78,10 +55,6 @@ class RatesViewHolder private constructor(val binding: RatesItemBinding) : Recyc
 
             return RatesViewHolder(binding)
         }
-    }
-
-    fun onUnbind(){
-        binding.itemCurrenciesEtAmount.clearFocus()
     }
 
     fun bind(viewModel: CurrenciesViewModel, item: RatesListItem, position: Int) {
@@ -114,10 +87,10 @@ class RatesViewHolder private constructor(val binding: RatesItemBinding) : Recyc
     }
 }
 
+// Custom EditText for handling focus
 class MyEditText(context: Context, attrs: AttributeSet) : EditText(context, attrs) {
 
     override fun onKeyPreIme(keyCode: Int, event: KeyEvent): Boolean {
-
         clearFocus()
         // Event is handled therefore return true
         return true

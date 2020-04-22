@@ -6,10 +6,10 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "ratesObject")
-class RatesObject constructor (
+class RatesObject constructor(
 
     @PrimaryKey(autoGenerate = true)
-    var id : Int? = 1,
+    var id: Int? = 1,
 
     @SerializedName("base")
     var base: String = "",
@@ -21,8 +21,6 @@ class RatesObject constructor (
     @TypeConverters(RatesConverter::class)
     @SerializedName("rates")
     var rates: HashMap<String, Double>
-
-//    var ratesSorted: ArrayList<RatesListItem>
 
 )
 
@@ -42,11 +40,8 @@ class RatesConverter {
         fun stringToRates(value: String): HashMap<String, Double> =
             gson.fromJson(value, object : TypeToken<HashMap<String, Double>>() {}.type)
 
-
         @TypeConverter
         @JvmStatic
-
         fun fromRatesToString(levels: HashMap<String, Double>) = Gson().toJson(levels)
-
     }
 }

@@ -8,7 +8,5 @@ interface APIConstants {
         const val LATEST_RATES = "/latest"
 
         const val CONTENT_TYPE_JSON = "Content-Type: application/json"
-        const val CONTENT_TYPE_TEXT = "Content-Type: text/plain"
-
     }
 }

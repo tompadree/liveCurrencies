@@ -66,25 +66,25 @@ class CurrenciesRepositoryTest {
 
     @Test
     fun getRates_requestRatesFromRemoteDataSource() = mainCoroutineRule.runBlockingTest {
-        // When tasks are requested from the tasks repository
+        // When rates are requested from the rates repository
         val rates = repository.getLatestRates(true, "CAD") as Result.Success
 
-        // Then tasks are loaded from the remote data source
+        // Then rates are loaded from the remote data source
         assertThat(rates.data.base, IsEqual(ratesObjRemote.base))
     }
 
     @Test
-    fun getTasks_requestAllTasksFromLocalDataSource() = mainCoroutineRule.runBlockingTest {
-        // When tasks are requested from the tasks repository
+    fun getRates_requestAllRatesFromLocalDataSource() = mainCoroutineRule.runBlockingTest {
+        // When rates are requested from the rates repository
         val rates = repository.getLatestRates(false, "AUD") as Result.Success
 
-        // Then tasks are loaded frotm the local repository
+        // Then rates are loaded frotm the local repository
         assertEquals(rates.data, ratesObjLocal)
     }
 
     @Test
     fun saveRates_toLocal() = runBlockingTest {
-        // When tasks are requested from the tasks repository
+        // When rates are requested from the rates repository
         val rates = repository.getLatestRates(true, "EUR") as Result.Success
 
         // Save rates

@@ -30,15 +30,6 @@ class CurrenciesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_navigation)
 
         showSnackbar(findViewById(android.R.id.content))
-
-        val navController: NavController = findNavController(R.id.mainNavHost)
-//        appBarConfiguration =
-//            AppBarConfiguration.Builder(R.id.tasks_fragment_dest, R.id.statistics_fragment_dest)
-//                .setDrawerLayout(drawerLayout)
-//                .build()
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        findViewById<NavigationView>(R.id.nav_view)
-//            .setupWithNavController(navController)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -65,7 +56,7 @@ class CurrenciesActivity : AppCompatActivity() {
 
     }
 
-    protected open fun showSnackbar(parentLayout: View){
+    private fun showSnackbar(parentLayout: View){
 
         val intentFilter = IntentFilter()
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)

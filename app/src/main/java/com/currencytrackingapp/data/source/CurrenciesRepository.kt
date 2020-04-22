@@ -13,8 +13,6 @@ interface CurrenciesRepository {
 
     suspend fun getLatestRates(forceUpdate: Boolean = false, base: String = "EUR"): Result<RatesObject>
 
-//    suspend fun refreshRates(base: String)
-
     suspend fun saveRates(rates: RatesObject)
 
     suspend fun deleteRates()

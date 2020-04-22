@@ -18,7 +18,8 @@ import java.util.*
 import kotlin.collections.HashMap
 
 
-class CurrenciesViewModel(private val repository: CurrenciesRepository, private val internetConnectionManager: InternetConnectionManager) : ViewModel() { //} BaseViewModel() { //, KoinComponent {
+class CurrenciesViewModel(private val repository: CurrenciesRepository,
+                          private val internetConnectionManager: InternetConnectionManager) : ViewModel() {
 
     var DELAY_LIST_REFRESH: Long = 3500
 
@@ -29,7 +30,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
 //    val snackbarText: LiveData<Int> = _snackbarText
 
     val isDataLoadingError = MutableLiveData<Boolean>(false)
-
 
     protected val _error = SingleLiveEvent<Throwable>()
     val error: LiveData<Throwable> get() = _error
@@ -46,7 +46,7 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
                 _dataLoading.value = false
             }
         }
-        // first fetched locally from last time than updated from backend
+
         repository.observeRates().switchMap {
             filterRates(it)
         }
@@ -64,13 +64,7 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
         constantRefresh()
     }
 
-//    fun fetchRates(forceUpdate: Boolean) {
-////        _dataLoading.value = true
-//        _forceUpdate.value = forceUpdate
-//    }
-
     fun refresh(loading: Boolean) {
-//        val isInternet = internetConnectionManager.hasInternetConnection() && !isDataLoadingError.value!!
         _dataLoading.value = internetConnectionManager.hasInternetConnection() && !isDataLoadingError.value!! && loading
         _forceUpdate.value = internetConnectionManager.hasInternetConnection()
         if(DELAY_LIST_REFRESH == 3500L) DELAY_LIST_REFRESH = 1000
@@ -96,7 +90,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
         val result = MutableLiveData<List<RatesListItem>>()
 
         if (ratesResult is Success) {
-//            isDataLoadingError.value = false
             viewModelScope.launch {
                 result.value = filterItems(ratesResult.data.rates)
                 showSnackbarMessage(R.string.error_default_db)
@@ -104,13 +97,12 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
         } else {
             result.value = emptyList()
             showSnackbarMessage(R.string.error_default_db)
-//            isDataLoadingError.value = true
         }
         return result
     }
 
     private fun filterItems(rates: HashMap<String, Double>): List<RatesListItem> {
-        // We filter the tasks based on the requestType
+        // Filter the tasks based on the requestType
         val currentValue = if(_currentValue.get()!!.isNotEmpty()) _currentValue.get()?: "100" else "0.0"
         val returnList =  LinkedList<RatesListItem>()
 

@@ -13,7 +13,9 @@ import java.io.IOException
 /**
  * @author Tomislav Curis
  */
-class CurrenciesRemoteDataSource(private val revolutApi: RevolutApi, private val dispatchers: CoroutineDispatcher = Dispatchers.IO) : CurrenciesDataSource {
+class CurrenciesRemoteDataSource(
+    private val revolutApi: RevolutApi,
+    private val dispatchers: CoroutineDispatcher = Dispatchers.IO) : CurrenciesDataSource {
 
     private val observableRates = MutableLiveData<Result<RatesObject>>()
 

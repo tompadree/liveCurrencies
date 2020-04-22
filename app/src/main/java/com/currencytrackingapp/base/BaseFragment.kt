@@ -4,24 +4,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.currencytrackingapp.R
-import com.currencytrackingapp.utils.helpers.AppUtils
 import com.currencytrackingapp.utils.helpers.dialogs.DialogManager
-import com.currencytrackingapp.utils.helpers.dialogs.LoadingDialog
 import com.currencytrackingapp.utils.network.InternetConnectionException
 import com.currencytrackingapp.utils.network.NetworkException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.koin.core.parameter.parametersOf
 import kotlin.coroutines.CoroutineContext
 import com.currencytrackingapp.utils.helpers.observe
 import org.koin.android.ext.android.get
 
 
-// Activities and fragments extend KoinComponent by default
-abstract class BaseFragment : Fragment(), CoroutineScope { //, KoinComponent {
+abstract class BaseFragment : Fragment(), CoroutineScope {
 
     protected val TAG = this::class.java.simpleName
 
@@ -60,12 +55,10 @@ abstract class BaseFragment : Fragment(), CoroutineScope { //, KoinComponent {
     }
 
     protected open fun showError(throwable: Throwable) {
-        if (throwable is InternetConnectionException) {
-            showError(getString(R.string.no_internet_connection_title), getString(R.string.no_internet_connection_text))
-        } else if (throwable is NetworkException) {
-            showError(throwable.getErrors()?.message)
-        } else {
-            showUnknownError()
+        when (throwable) {
+            is InternetConnectionException -> showError(getString(R.string.no_internet_connection_title), getString(R.string.no_internet_connection_text))
+            is NetworkException -> showError(throwable.getErrors()?.message)
+            else -> showUnknownError()
         }
     }
 
@@ -85,7 +78,7 @@ abstract class BaseFragment : Fragment(), CoroutineScope { //, KoinComponent {
         getDialogManager().openOneButtonDialog(R.string.ok, R.string.error_default, true)
     }
 
-    fun getDialogManager(): DialogManager {
+    private fun getDialogManager(): DialogManager {
         if (dialogManager == null) {
             dialogManager = get { parametersOf(requireContext()) }
         }

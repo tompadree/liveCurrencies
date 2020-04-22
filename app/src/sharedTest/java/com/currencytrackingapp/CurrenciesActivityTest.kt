@@ -40,7 +40,7 @@ import org.koin.test.inject
 /**
  * @author Tomislav Curis
  *
- * Large End-to-End test for the tasks module.
+ * Large End-to-End test.
  *
  * UI tests usually use [ActivityTestRule] but there's no API to perform an action before
  * each test. The workaround is to use `ActivityScenario.launch()` and `ActivityScenario.close()`.
@@ -97,7 +97,7 @@ class CurrenciesActivityTest : KoinTest {
     @Test
     fun displayRates() {
 
-        // Start up tasks screen and start monitor
+        // Start up CurrenciesActivity screen and start monitor
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
@@ -119,7 +119,7 @@ class CurrenciesActivityTest : KoinTest {
         // WHEN Add fake rates
         runBlocking {  repository.saveRates(RatesObject(1, "TEST", "2018-09-06", hashMapOf("TEST" to 100.00))) }
 
-        // Start up tasks screen and start monitor
+        // Start up CurrenciesActivity screen and start monitor
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
@@ -133,7 +133,7 @@ class CurrenciesActivityTest : KoinTest {
     @Test
     fun onValueChange() {
 
-        // Start up tasks screen and start monitor
+        // Start up CurrenciesActivity screen and start monitor
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
@@ -150,7 +150,7 @@ class CurrenciesActivityTest : KoinTest {
     @Test
     fun clickOnItemSetCheckFirst() {
 
-        // Start up tasks screen and start monitor
+        // Start up CurrenciesActivity screen and start monitor
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
@@ -180,7 +180,7 @@ class CurrenciesActivityTest : KoinTest {
     @Test
     fun clickOnItemCheckValues() {
 
-        // Start up tasks screen and start monitor
+        // Start up CurrenciesActivity screen and start monitor
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
@@ -213,7 +213,7 @@ class CurrenciesActivityTest : KoinTest {
     @Test
     fun checkOtherValuesOnFirstValueEdited() {
 
-        // Start up tasks screen and start monitor
+        // Start up CurrenciesActivity screen and start monitor
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
