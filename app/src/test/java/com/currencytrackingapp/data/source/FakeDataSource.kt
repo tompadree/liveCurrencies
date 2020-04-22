@@ -9,7 +9,7 @@ import java.lang.Exception
  * @author Tomislav Curis
  */
 class FakeDataSource(var ratesObject: RatesObject?
-                     = RatesObject(1,"ZAR","2018-08-06", HashMap<String, Double>())
+                     = RatesObject(1,"ZAR","2018-08-06", HashMap())
 ) : CurrenciesDataSource {
 
     override suspend fun getLatestRates(base: String): Result<RatesObject> {

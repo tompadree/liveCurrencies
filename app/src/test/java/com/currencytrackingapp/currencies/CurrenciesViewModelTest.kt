@@ -1,6 +1,5 @@
 package com.currencytrackingapp.currencies
 
-import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.currencytrackingapp.util.MainCoroutineRule
 import com.currencytrackingapp.data.source.FakeRepository
@@ -20,7 +19,6 @@ import org.junit.Test
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.inject
-import org.mockito.Mock
 
 /**
  * @author Tomislav Curis
@@ -35,10 +33,6 @@ class CurrenciesViewModelTest : KoinTest{
 
     // Use a fake repository to be injected into the viewmodel
     private lateinit var repository: FakeRepository
-
-    // Context for internet manager
-    @Mock
-    private lateinit var context: Application
 
     // Rule for koin injection
     @get:Rule

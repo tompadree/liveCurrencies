@@ -8,12 +8,10 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
@@ -31,7 +29,6 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.dsl.module
@@ -146,7 +143,7 @@ class CurrenciesFragmentTest : KoinTest {
 
         // THEN verify CNY is the first item
         onView(withText("CNY")).check(matches(
-            customMatcherForFirstItem("CNY", withParent(withId(R.id.currenciesRv)))))
+            customMatcherForFirstItem("CNY")))
 
         // Calculated value of EUR to CNY conversion
         val currentRate = (viewModel.roundOffDecimal(100.00 * dummyRatesObject.rates["CNY"]!!)).toString()
@@ -173,7 +170,7 @@ class CurrenciesFragmentTest : KoinTest {
 
         // THEN verify CZK is the first item
         onView(withText("CZK")).check(matches(
-            customMatcherForFirstItem("CZK", withParent(withId(R.id.currenciesRv)))))
+            customMatcherForFirstItem("CZK")))
 
         // Calculated value of EUR to CZK conversion
         val currentRateFirst = (viewModel.roundOffDecimal(100.00 * dummyRatesObject.rates["CZK"]!!)).toString()
@@ -209,7 +206,7 @@ class CurrenciesFragmentTest : KoinTest {
     }
 
     // True if first item in the RV and input text
-    private fun <T> customMatcherForFirstItem(name: String, matcher: Matcher<T>): Matcher<T> {
+    private fun <T> customMatcherForFirstItem(name: String): Matcher<T> {
         return object: BaseMatcher<T> () {
             var isFirst = true
             override fun matches(item: Any): Boolean {

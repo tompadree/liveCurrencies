@@ -74,7 +74,7 @@ class CurrenciesDAOTest {
         // retrieve object
         val ratesObj = currenciesDAO.getCurrencies()
 
-        assertThat<RatesObject>(ratesObj as RatesObject, notNullValue())
+        assertThat(ratesObj, notNullValue())
         assertThat(ratesObj.id, `is`(1))
         assertThat(ratesObj.base, `is`("AUD"))
         assertThat(ratesObj.date, `is`("2019-09-06"))

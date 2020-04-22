@@ -1,6 +1,5 @@
 package com.currencytrackingapp.util
 
-
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -9,6 +8,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingResource
+import com.currencytrackingapp.splash.SplashFragment
 import java.util.UUID
 
 /**
@@ -29,7 +29,7 @@ class DataBindingIdlingResource : IdlingResource {
     override fun getName() = "DataBinding $id"
 
     override fun isIdleNow(): Boolean {
-        val idle = !getBindings().any { it.hasPendingBindings() }
+        val idle = (!getBindings().any { it.hasPendingBindings() }) && (getSplashFrag() == null)
         @Suppress("LiftReturnOrAssignment")
         if (idle) {
             if (wasNotIdle) {
@@ -66,15 +66,29 @@ class DataBindingIdlingResource : IdlingResource {
         val childrenBindings = fragments?.flatMap { it.childFragmentManager.fragments }
             ?.mapNotNull { it.view?.getBinding() } ?: emptyList()
 
+        return bindings + childrenBindings
+    }
 
-        val bindings2 =
+    /**
+     *  Detect splash fragment.
+     */
+    private fun getSplashFrag(): SplashFragment? {
+        val fragments = (activity as? FragmentActivity)
+            ?.supportFragmentManager
+            ?.fragments
+        val bindings =
             fragments?.mapNotNull {
-                it
+                it.childFragmentManager.primaryNavigationFragment
             } ?: emptyList()
-        val childrenBindings2 = fragments?.flatMap { it.childFragmentManager.fragments }
+        val childrenFrags = fragments?.flatMap { it.childFragmentManager.fragments }
             ?.mapNotNull { it } ?: emptyList()
 
-        return bindings + childrenBindings
+
+        for(frag in childrenFrags)
+            if(frag is SplashFragment)
+                return frag
+
+        return null
     }
 }
 
@@ -94,8 +108,8 @@ fun DataBindingIdlingResource.monitorActivity(
 /**
  * Sets the fragment from a [FragmentScenario] to be used from [DataBindingIdlingResource].
  */
-fun DataBindingIdlingResource.monitorFragment(fragmentScenario: FragmentScenario<out Fragment>) {
-    fragmentScenario.onFragment {
-        this.activity = it.requireActivity()
-    }
-}
+//fun DataBindingIdlingResource.monitorFragment(fragmentScenario: FragmentScenario<out Fragment>) {
+//    fragmentScenario.onFragment {
+//        this.activity = it.requireActivity()
+//    }
+//}

@@ -89,7 +89,7 @@ class CurrenciesLocalDataSourceTest {
         // retrieve object
         val ratesObj = localDataSource.getLatestRates("") as Result.Success
 
-        assertThat<RatesObject>(ratesObj.data as RatesObject, notNullValue())
+        assertThat(ratesObj.data, notNullValue())
         assertThat(ratesObj.data.id, `is`(1))
         assertThat(ratesObj.data.base, `is`("AUD"))
         assertThat(ratesObj.data.date, `is`("2019-09-06"))

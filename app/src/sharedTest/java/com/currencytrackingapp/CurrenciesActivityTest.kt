@@ -1,38 +1,28 @@
 package com.currencytrackingapp
 
-import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.*
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.*
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.currencytrackingapp.base.CurrenciesActivity
-import com.currencytrackingapp.currencies.CurrenciesFragment
 import com.currencytrackingapp.currencies.CurrenciesViewModel
 import com.currencytrackingapp.data.models.RatesObject
 import com.currencytrackingapp.data.source.CurrenciesRepository
 import com.currencytrackingapp.data.source.FakeRepository
 import com.currencytrackingapp.util.DataBindingIdlingResource
-import com.currencytrackingapp.util.SplashIdlingResource
 import com.currencytrackingapp.util.monitorActivity
-import com.currencytrackingapp.utils.AppConstants
 import com.currencytrackingapp.utils.EspressoIdlingResource
-import com.currencytrackingapp.utils.helpers.delay
-import com.currencytrackingapp.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.BaseMatcher
@@ -46,8 +36,6 @@ import org.junit.runner.RunWith
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.inject
-import org.mockito.Mockito
-import java.util.concurrent.TimeUnit
 
 /**
  * @author Tomislav Curis
@@ -57,7 +45,6 @@ import java.util.concurrent.TimeUnit
  * UI tests usually use [ActivityTestRule] but there's no API to perform an action before
  * each test. The workaround is to use `ActivityScenario.launch()` and `ActivityScenario.close()`.
  */
-
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 @ExperimentalCoroutinesApi
@@ -68,8 +55,6 @@ class CurrenciesActivityTest : KoinTest {
 
     // An Idling Resource that waits for Data Binding to have no pending bindings
     private val  dataBindingIdlingResource = DataBindingIdlingResource()
-
-    private val  splashIdlingResource = SplashIdlingResource()
 
     private var dummyRatesObject = RatesObject(1, "EUR", "2018-09-06", FakeRepository.dummyRates)
 
@@ -94,11 +79,11 @@ class CurrenciesActivityTest : KoinTest {
         runBlocking {  repository.deleteRates() }
     }
 
-
+    // Register IdlingResource
     @Before
     fun registerIdlingResource() {
         IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
-//        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
+        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
     }
 
 
@@ -114,44 +99,17 @@ class CurrenciesActivityTest : KoinTest {
 
         // Start up tasks screen and start monitor
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
-
-        IdlingRegistry.getInstance().register(splashIdlingResource)
-        splashIdlingResource.monitorActivity(activityScenario)
-            Espresso.onView(withText("SPLASH"))
-                .check(ViewAssertions.matches(isDisplayed()))
-        IdlingRegistry.getInstance().unregister(splashIdlingResource)
-
-        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-//        IdlingPolicies.setMasterPolicyTimeout(
-//            1000 * 4, TimeUnit.MILLISECONDS)
-
-//        IdlingPolicies.setIdlingResourceTimeout(
-//            1000 * 3, TimeUnit.MILLISECONDS);
-
-//        // THEN - Verify splash is displayed on screen
-//        Espresso.onView(withText("SPLASH"))
-//            .check(ViewAssertions.matches(isDisplayed()))
-//
-//        // Wait for splash
-//        onView(isRoot()).perform(waitFor(350));
-
-
-            // THEN - Verify rates are displayed on screen
-            Espresso.onView(withText("CAD"))
-                .check(ViewAssertions.matches(isDisplayed()))
-            Espresso.onView(withText("BGN"))
-                .check(ViewAssertions.matches(isDisplayed()))
-            Espresso.onView(withText("DKK"))
-                .check(ViewAssertions.matches(isDisplayed()))
-            Espresso.onView(withText("GBP"))
-                .check(ViewAssertions.matches(isDisplayed()))
-
+        // THEN - Verify rates are displayed on screen
+        Espresso.onView(withText("AUD")).check(matches(isDisplayed()))
+        Espresso.onView(withText("CAD")).check(matches(isDisplayed()))
+        Espresso.onView(withText("BGN")).check(matches(isDisplayed()))
+        Espresso.onView(withText("DKK")).check(matches(isDisplayed()))
+        Espresso.onView(withText("GBP")).check(matches(isDisplayed()))
 
         // Close the activity before closing the DB
         activityScenario.close()
-
     }
 
 
@@ -165,16 +123,8 @@ class CurrenciesActivityTest : KoinTest {
         val activityScenario = ActivityScenario.launch(CurrenciesActivity::class.java)
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
-        // THEN - Verify splash is displayed on screen
-        Espresso.onView(withText("SPLASH"))
-            .check(ViewAssertions.matches(isDisplayed()))
-
-        // Wait for splash
-        onView(isRoot()).perform(waitFor(350));
-
         // THEN - Verify rate is displayed on screen
-        Espresso.onView(withText("TEST"))
-            .check(ViewAssertions.matches(isDisplayed()))
+        Espresso.onView(withText("TEST")).check(matches(isDisplayed()))
 
         // Close the activity before closing the DB
         activityScenario.close()
@@ -191,8 +141,7 @@ class CurrenciesActivityTest : KoinTest {
         val currentRate = (viewModel.roundOffDecimal(100.00 * dummyRatesObject.rates["BRL"]!!)).toString()
 
         // WHEN - Check change value of the first item
-        Espresso.onView(editTextWithTextView("BRL"))
-            .check(ViewAssertions.matches(withText(currentRate)))
+        Espresso.onView(editTextWithTextView("BRL")).check(matches(withText(currentRate)))
 
         // Close the activity before closing the DB
         activityScenario.close()
@@ -209,25 +158,20 @@ class CurrenciesActivityTest : KoinTest {
         Espresso.onView(withId(R.id.currenciesRv))
             .perform(
                 RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    hasDescendant(withText("CNY")), ViewActions.click()
+                    hasDescendant(withText("CNY")), click()
                 ))
 
         // THEN verify CNY is the first item
         Espresso.onView(withText("CNY")).check(
-            ViewAssertions.matches(
-                customMatcherForFirstItem(
-                    "CNY",
-                    withParent(withId(R.id.currenciesRv))
-                )
-            )
-        )
+            matches(
+                customMatcherForFirstItem("CNY")))
 
         // Calculated value of EUR to CNY conversion
-        val currentRate = (viewModel.roundOffDecimal(100.00 * dummyRatesObject.rates["CNY"]!!)).toString()
+        val currentRate = (
+                viewModel.roundOffDecimal(100.00 * dummyRatesObject.rates["CNY"]!!)).toString()
 
         // WHEN - Check change value of the first item
-        Espresso.onView(editTextWithTextView("CNY"))
-            .check(ViewAssertions.matches(withText(currentRate)))
+        Espresso.onView(editTextWithTextView("CNY")).check(matches(withText(currentRate)))
 
         // Close the activity before closing the DB
         activityScenario.close()
@@ -244,34 +188,23 @@ class CurrenciesActivityTest : KoinTest {
         Espresso.onView(withId(R.id.currenciesRv))
             .perform(
                 RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                    hasDescendant(
-                        withText("CZK")
-                    ), ViewActions.click()
-                ))
+                    hasDescendant(withText("CZK")), click()))
 
         // THEN verify CZK is the first item
-        Espresso.onView(withText("CZK")).check(
-            ViewAssertions.matches(
-                customMatcherForFirstItem(
-                    "CZK",
-                    withParent(withId(R.id.currenciesRv))
-                )
-            )
-        )
+        Espresso.onView(withText("CZK")).check(matches(
+            customMatcherForFirstItem("CZK")))
 
         // Calculated value of EUR to CZK conversion
         val currentRateFirst = (viewModel.roundOffDecimal(100.00 * dummyRatesObject.rates["CZK"]!!)).toString()
 
         // WHEN - Check change value of the first item
-        Espresso.onView(editTextWithTextView("CZK"))
-            .check(ViewAssertions.matches(withText(currentRateFirst)))
+        Espresso.onView(editTextWithTextView("CZK")).check(matches(withText(currentRateFirst)))
 
         // Calculated value of EUR to CHF conversion
         val currentRateOther = (viewModel.roundOffDecimal(currentRateFirst.toDouble() * dummyRatesObject.rates["CHF"]!!)).toString()
 
         // WHEN - Change value of the first item
-        Espresso.onView(editTextWithTextView("CHF"))
-            .check(ViewAssertions.matches(withText(currentRateOther)))
+        Espresso.onView(editTextWithTextView("CHF")).check(matches(withText(currentRateOther)))
 
         // Close the activity before closing the DB
         activityScenario.close()
@@ -285,21 +218,20 @@ class CurrenciesActivityTest : KoinTest {
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
         // Change  the value in the first item EditText (init is 100.0)
-        Espresso.onView(withText("100.0")).perform(ViewActions.replaceText("145.00"))
+        Espresso.onView(withText("100.0")).perform(replaceText("145.00"))
 
         // Calculated value of EUR to DKK conversion
         val currentRate = (viewModel.roundOffDecimal(145.00 * dummyRatesObject.rates["DKK"]!!)).toString()
 
         // WHEN - Check change value of the first item
-        Espresso.onView(editTextWithTextView("DKK"))
-            .check(ViewAssertions.matches(withText(currentRate)))
+        Espresso.onView(editTextWithTextView("DKK")).check(matches(withText(currentRate)))
 
         // Close the activity before closing the DB
         activityScenario.close()
     }
 
     // True if first item in the RV and input text
-    private fun <T> customMatcherForFirstItem(name: String, matcher: Matcher<T>): Matcher<T> {
+    private fun <T> customMatcherForFirstItem(name: String): Matcher<T> {
         return object: BaseMatcher<T>() {
             var isFirst = true
             override fun matches(item: Any): Boolean {
@@ -319,21 +251,5 @@ class CurrenciesActivityTest : KoinTest {
             withId(R.id.itemCurrenciesEtAmount),
             hasSibling(withText(text))
         )
-    }
-
-    // https://stackoverflow.com/a/52831832
-    private fun waitFor(delay: Long): ViewAction {
-        return object : ViewAction {
-            override fun getDescription(): String {
-                return "wait for " + delay + "milliseconds"
-            }
-
-            override fun getConstraints(): Matcher<View> {
-                return isRoot(); }
-
-            override fun perform(uiController: UiController?, view: View?) {
-                uiController?.loopMainThreadForAtLeast(delay); }
-
-        }
     }
 }

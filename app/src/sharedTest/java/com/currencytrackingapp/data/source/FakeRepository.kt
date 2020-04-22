@@ -1,9 +1,7 @@
 package com.currencytrackingapp.data.source
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.switchMap
 import com.currencytrackingapp.data.models.RatesObject
 import com.currencytrackingapp.data.models.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -82,14 +80,9 @@ class FakeRepository : CurrenciesRepository {
 
     override suspend fun saveRates(rates: RatesObject) {
         ratesObject = rates
-//        runBlocking { observableRates.postValue(Result.Success(rates))}
     }
 
     override suspend fun deleteRates() {
         ratesObject = RatesObject(null, "", "", hashMapOf())
-//        ratesObject.id = 0
-//        ratesObject.base = ""
-//        ratesObject.date = ""
-//        ratesObject.rates.clear()
     }
 }
