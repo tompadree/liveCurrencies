@@ -82,16 +82,12 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
             }
         }
 
-
-
-//        connectivityChecker.apply {
-//                binding.lifecycleOwner?.let {
-//                    lifecycle.addObserver(this)
-//                    connectedStatus.observe(it, Observer { connected ->
-//                        viewModel._forceUpdate.value = connected
-//                    })
-//                }
-//        }
+        viewModel.isDataLoadingError.observe(this) {
+            it?.let {
+                swipeRefreshLayout.isEnabled = it
+                swipeRefreshLayout.isRefreshing = it
+            }
+        }
     }
 
     private fun setupRv() {
@@ -102,6 +98,13 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
                 layoutManager = LinearLayoutManager(context)
                 adapter = currentRatesAdapter
                 (currenciesRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+                // width and height don't change
+                setHasFixedSize(true)
+                // Set the number of offscreen views to retain before adding them
+                // to the potentially shared recycled view pool
+                setItemViewCacheSize(32)
+
+
 
                 // Scroll to first item after change
                 currentRatesAdapter.registerAdapterDataObserver(object : AdapterDataObserver() {
@@ -115,36 +118,4 @@ class CurrenciesFragment : BindingFragment<FragmentCurrenciesBinding>() {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
     }
-
-//    private fun showSnackbar() {
-//        internetConnectionManager.isInternetAvailable(activity.parent)
-//
-//
-//    }
-
-//    private fun setView() {
-//
-//        showSnackbar(findViewById(android.R.id.content))
-//
-//        currentRatesAdapter = CurrentRatesListAdapter(this, this)
-//
-//        with(currenciesRv) {
-//            layoutManager = LinearLayoutManager(context)
-//            adapter = currentRatesAdapter
-//            setHasFixedSize(true)
-//
-//            (currenciesRv.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-//            currenciesRv.itemAnimator = null
-//
-//
-//            currentRatesAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-//                override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-//                    super.onItemRangeMoved(fromPosition, toPosition, itemCount)
-//                    (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(0, 0)
-//                }
-//            })
-//
-//        }
-//    }
-
 }

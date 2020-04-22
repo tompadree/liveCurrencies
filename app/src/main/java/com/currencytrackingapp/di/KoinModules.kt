@@ -73,7 +73,7 @@ val NetModule = module {
 
         OkHttpClient.Builder()
             .connectTimeout(40, TimeUnit.SECONDS)
-            .addInterceptor(NetworkExceptionInterceptor())
+//            .addInterceptor(NetworkExceptionInterceptor())
             .addInterceptor(ResponseInterceptor(get())).apply {
                 if (BuildConfig.DEBUG) {
                     var loggingInterceptor = HttpLoggingInterceptor()

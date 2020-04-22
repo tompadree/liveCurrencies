@@ -16,35 +16,28 @@ import de.hdodenhof.circleimageview.CircleImageView
 /**
  * @author Tomislav Curis
  */
+
 // custom binding of items
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: List<RatesListItem>?) {
-    items?.let { (listView.adapter as RatesListAdapter).submitList(items) }
+    if(items.isNullOrEmpty()) return
+
+    (listView.adapter as RatesListAdapter).submitList(items)
 }
 
-//@BindingAdapter("app:items")
-//fun setItems(listView: RecyclerView, items: List<RatesListItem>?, positionToSwap: Int) {
-//    items?.let {
-//        Collections.swap(items, positionToSwap, 0)
-//        (listView.adapter as RatesListAdapter).submitList(items)
-//    }
-//}
-
 @BindingAdapter("subTitleName")
-fun setFormattedText(textView: TextView, name: String) {
-//    if (name.isNullOrEmpty()) return
+fun setFormattedText(textView: TextView, subtitleName: String) {
     try {
-        textView.text = textView.resources.getString(CountryHelper.getNameForISO(name))
+        textView.text = textView.resources.getString(CountryHelper.getNameForISO(subtitleName))
     } catch (e: Exception) {
         e.printStackTrace()
     }
 }
 
 @BindingAdapter("imageName")
-fun setIcon(imageView: CircleImageView, name: String) {
-//    if (name.isNullOrEmpty()) return
+fun setIcon(imageView: CircleImageView, iconName: String) {
     try {
-        imageView.setImageResource(CountryHelper.getFlagForISO(name))
+        imageView.setImageResource(CountryHelper.getFlagForISO(iconName))
         imageView.clearFocus()
     } catch (e: Exception) {
         e.printStackTrace()
@@ -54,19 +47,11 @@ fun setIcon(imageView: CircleImageView, name: String) {
 @BindingAdapter("app:onBaseChanged")
 fun onBaseChanged(itemCurrenciesEtAmount: EditText, string: EditTextListener) {
 
-//    itemCurrenciesEtAmount.setOnClickListener { itemCurrenciesEtAmount.isEnabled = true }
-
-//    if(itemCurrenciesEtAmount.text.toString() != "12321")
-//        return
-
     itemCurrenciesEtAmount.addTextChangedListener(object : TextWatcher {
 
         var beforeCount = 0
 
         override fun afterTextChanged(p0: Editable) {
-//            if (beforeCount != p0.length)
-//                lastPosition = itemCurrenciesEtAmount.selectionStart
-
             itemCurrenciesEtAmount.requestFocus()
         }
 
@@ -77,7 +62,6 @@ fun onBaseChanged(itemCurrenciesEtAmount: EditText, string: EditTextListener) {
         override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
                 if(beforeCount!= count && itemCurrenciesEtAmount.isEnabled)
                     string.onTextChanged(p0.toString())
-//                    onCurrencyListener.onTypeListener(p0.toString())
         }
     })
 }

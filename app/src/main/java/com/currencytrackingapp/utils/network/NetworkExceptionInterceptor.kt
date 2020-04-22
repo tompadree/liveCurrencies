@@ -16,7 +16,9 @@ class NetworkExceptionInterceptor : Interceptor {
         val response = chain.proceed(chain.request())
         when (response.isSuccessful) {
             true  -> return response
-            false -> { throw NetworkException(response)
+            false -> {
+
+                throw NetworkException(response)
             }
         }
 

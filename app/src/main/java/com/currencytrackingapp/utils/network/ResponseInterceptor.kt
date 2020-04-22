@@ -3,6 +3,7 @@ package com.currencytrackingapp.utils.network
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
+import java.net.UnknownHostException
 
 class ResponseInterceptor(
     private val internetConnectionManager: InternetConnectionManager) : Interceptor {
@@ -14,7 +15,7 @@ class ResponseInterceptor(
     override fun intercept(chain: Interceptor.Chain?): Response {
         try {
             if (!internetConnectionManager.hasInternetConnection()) {
-                throw IOException()
+                throw InternetConnectionException()
             }
 
             val request = chain!!.request()
@@ -31,12 +32,16 @@ class ResponseInterceptor(
             }
 
             return response
+        } catch(e: UnknownHostException){
+            throw InternetConnectionException()
         } catch (e: NoInternetException) {
             throw e
         } catch (e: NetworkException) {
             throw e
-        } catch (e: IOException) {
+        } catch (e: InternetConnectionException) {
             e.printStackTrace()
+            throw InternetConnectionException()
+        } catch (e: IOException) {
             throw e
         } catch (e: Exception) {
             e.printStackTrace()

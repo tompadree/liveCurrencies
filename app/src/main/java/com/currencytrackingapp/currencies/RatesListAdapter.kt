@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,9 +25,10 @@ import kotlinx.android.synthetic.main.rates_item.itemCurrenciesEtAmount
 class RatesListAdapter(private val currenciesViewModel: CurrenciesViewModel)
     : ListAdapter<RatesListItem, RatesViewHolder>(RatesDiffUtil()) { //CurrentRateListViewHolde>(RatesDiffUtil()) {
 
-//    init {
+    init {
+        Log.e("TEST", "ADAPTER IS INIT")
 //        setHasStableIds(true)
-//    }
+    }
 
     var lastBase = ""
 

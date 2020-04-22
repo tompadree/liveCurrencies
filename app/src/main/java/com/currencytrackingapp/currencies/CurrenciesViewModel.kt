@@ -20,6 +20,8 @@ import kotlin.collections.HashMap
 
 class CurrenciesViewModel(private val repository: CurrenciesRepository, private val internetConnectionManager: InternetConnectionManager) : ViewModel() { //} BaseViewModel() { //, KoinComponent {
 
+    var DELAY_LIST_REFRESH: Long = 3500
+
     val _currentBase = ObservableField<String>("EUR")
     val _currentValue = ObservableField<String>("100")
 
@@ -37,13 +39,9 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
 
     private val _forceUpdate = MutableLiveData<Boolean>(false)
 
-    // https://stackoverflow.com/questions/47575961/what-is-the-difference-between-map-and-switchmap-methods
     private val _items: LiveData<List<RatesListItem>> = _forceUpdate.switchMap { forceUpdate ->
         if (forceUpdate && internetConnectionManager.hasInternetConnection()) {
-//            _dataLoading.value = true
             viewModelScope.launch {
-                // RefreshRates don't have error handle
-//                repository.refreshRates(_currentBase.get()!!)
                 handleResponseWithError(repository.getLatestRates(forceUpdate, _currentBase.get()!!))
                 _dataLoading.value = false
             }
@@ -72,18 +70,18 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
 //    }
 
     fun refresh(loading: Boolean) {
-        val isInternet = internetConnectionManager.hasInternetConnection() && !isDataLoadingError.value!!
-        _dataLoading.value = isInternet && loading
-        _forceUpdate.value = isInternet
+//        val isInternet = internetConnectionManager.hasInternetConnection() && !isDataLoadingError.value!!
+        _dataLoading.value = internetConnectionManager.hasInternetConnection() && !isDataLoadingError.value!! && loading
+        _forceUpdate.value = internetConnectionManager.hasInternetConnection()
+        if(DELAY_LIST_REFRESH == 3500L) DELAY_LIST_REFRESH = 1000
     }
 
     // Service not used for the sake of the MVVM demo
-    fun constantRefresh() {
+    private fun constantRefresh() {
         viewModelScope.launch {
             while (true) {
-                delay(1000)
+                delay(DELAY_LIST_REFRESH)
                 refresh(false)
-//                fetchRates(!isDataLoadingError.value!!)
             }
         }
     }
@@ -127,7 +125,6 @@ class CurrenciesViewModel(private val repository: CurrenciesRepository, private 
         }
 
         return sorting(currentValue.toDouble(), _currentBase.get()!!, returnList)
-
     }
 
 
